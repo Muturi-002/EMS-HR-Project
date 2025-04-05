@@ -13,3 +13,5 @@
 *.nb-gradle/
 
 *target/
+###Test Database directory
+*testdb/
