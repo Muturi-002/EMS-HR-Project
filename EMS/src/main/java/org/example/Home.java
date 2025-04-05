@@ -4,8 +4,9 @@ import javax.swing.*;
 import java.awt.event.*;
 
 public class Home{
-    private JButton btnview, btncreate, btnexit,btnemployee,btntemp,btntempstaff;
-    public Home(){
+    JButton btnview, btncreate, btnexit,btnemployee,btntemp,btntempstaff;
+    JFrame frame= new JFrame("Home Page");
+    Home(){
        btncreate= new JButton("Create Record");
        btnview= new JButton("View Record");
        btnexit= new JButton("Exit");
@@ -13,40 +14,40 @@ public class Home{
        btntemp= new JButton("Temporary stuff");
        btntempstaff= new JButton("Tempstaff");
 
-       setVisible (true);
-       setSize(300,200);
-       setDefaultCloseOperation( EXIT_ON_CLOSE);
+       frame.setVisible (true);
+       frame.setSize(300,200);
+       frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);
+       frame.setLayout(new FlowLayout());
 
-       setLayout(new FlowLayout());
-       add (btncreate);
-       add (btnview);
-       add (btnemployee);
-       add (btntemp);
-       add (btntempstaff);
-       add (btnexit);
+       frame.add(btncreate);
+       frame.add(btnview);
+       frame.add(btnemployee);
+       frame.add(btntemp);
+       frame.add(btntempstaff);
+       frame.add(btnexit);
 
        btnview.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e){
             new View();
-            dispose();
+            frame.dispose();
         }
        });
        btnemployee.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e){
             new Employee();
-            dispose();
+            frame.dispose();
         }
        });
        btntemp.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e){
-            new Temporary();
-            dispose();
+            new Temp();
+            frame.dispose();
         }
        });
        btntempstaff.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e){
-            new Tempstaff();
-            dispose();
+            new TempStaff();
+            frame.dispose();
         }
        });
        
