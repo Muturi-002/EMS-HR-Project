@@ -1,11 +1,12 @@
 package org.example.HR;
 import org.example.Welcome;//imports the Welcome class from the parent package (org.example)
+import org.example.Standard;//imports the Standard class from the parent package (org.example)
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-public class Auth extends JFrame implements ActionListener {
+public class Auth extends Standard implements ActionListener {
     JLabel auth = new JLabel("HR Authentication");
     JLabel user = new JLabel("Username");
     JLabel pass = new JLabel("Password");
@@ -20,9 +21,7 @@ public class Auth extends JFrame implements ActionListener {
     JPasswordField password = new JPasswordField(20);
 
     Auth() {
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("HR Staff Authentication");
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setLayout(new BorderLayout(20, 20));
 
         int width = Toolkit.getDefaultToolkit().getScreenSize().width;
