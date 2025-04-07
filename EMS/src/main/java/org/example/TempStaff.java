@@ -1,3 +1,4 @@
+package org.example;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -5,7 +6,7 @@ import java.awt.event.ActionListener;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class TempStaffGUI extends JFrame implements ActionListener {
+public class TempStaff extends JFrame implements ActionListener {
 
     private JTextField firstNameField, middleNameField, lastNameField, nationalIdField, addressField, disabilitiesField, kraPinField, departmentDivisionField, yearOfBirthField;
     private JComboBox<String> workLevelCombo;
@@ -14,7 +15,7 @@ public class TempStaffGUI extends JFrame implements ActionListener {
 
     private static final String DATA_FILE = "temp_staff_records.txt"; 
 
-    public TempStaffGUI() {
+    public TempStaff() {
         setTitle("Temporary Staff Registration");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(11, 2, 10, 10));
@@ -150,6 +151,6 @@ public class TempStaffGUI extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new TempStaffGUI());
+        SwingUtilities.invokeLater(() -> new TempStaff());
     }
 }
