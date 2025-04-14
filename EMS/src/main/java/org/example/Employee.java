@@ -1,20 +1,18 @@
+package org.example;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class EmployeeGUI {
-    private JFrame frame;
+public class Employee extends Standard{
     private JPanel panel;
     private JLabel lblEmployeeId, lblName, lblJobTitle;
     private JTextField txtEmployeeId, txtName, txtJobTitle;
     private JButton btnSave, btnClear;
 
-    public EmployeeGUI() {
+    public Employee() {
         // Create the frame
-        frame = new JFrame("Employee Information");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 300);
+        setTitle("Employee Information");
         
         // Create the panel
         panel = new JPanel();
@@ -43,7 +41,7 @@ public class EmployeeGUI {
         panel.add(btnClear);
 
         // Add panel to the frame
-        frame.add(panel);
+        add(panel);
         
         // Add action listener for the Save button
         btnSave.addActionListener(new ActionListener() {
@@ -60,9 +58,7 @@ public class EmployeeGUI {
                 clearFields();
             }
         });
-        
-        // Make the frame visible
-        frame.setVisible(true);
+
     }
 
     private void saveEmployee() {
@@ -71,9 +67,9 @@ public class EmployeeGUI {
         String jobTitle = txtJobTitle.getText();
 
         if (employeeId.isEmpty() || name.isEmpty() || jobTitle.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "All fields must be filled!", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "All fields must be filled!", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(frame, "Employee saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Employee saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
             // Here you can add code to save the employee info to a database or a file
         }
     }
@@ -89,7 +85,7 @@ public class EmployeeGUI {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new EmployeeGUI();
+                new Employee();
             }
         });
     }

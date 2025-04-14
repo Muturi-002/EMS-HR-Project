@@ -5,15 +5,13 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Temp extends JFrame {
+public class Temp extends Standard {
 
     private JTable tempTable;
 
     public Temp() {
         setTitle("Temporary Staff Records");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 400);
-        setLocationRelativeTo(null);
+
 
         // Table Columns
         String[] columnNames = {"ID", "Name", "Position", "Department", "Type"};

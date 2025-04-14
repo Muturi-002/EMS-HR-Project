@@ -3,10 +3,22 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class Home{
+public class Home extends JFrame{
     JButton btnview, btncreate, btnexit,btnemployee,btntemp,btntempstaff;
-    JFrame frame= new JFrame("Home Page");
-    Home(){
+    JLabel homeLabel= new JLabel("Welcome, ");
+    JPanel nav=new JPanel();
+    JPanel buttonPanel=new JPanel();
+    public Home(){
+       this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+       this.setTitle("Home Page");
+       this.setLayout(new BorderLayout(20,20));
+       int width= Toolkit.getDefaultToolkit().getScreenSize().width;
+       homeLabel.setPreferredSize(new Dimension(width,100));
+       homeLabel.setOpaque(true);
+       homeLabel.setBackground(Color.GRAY);
+       homeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+       homeLabel.setFont(new Font("Arial", Font.BOLD,20));
+
        btncreate= new JButton("Create Record");
        btnview= new JButton("View Record");
        btnexit= new JButton("Exit");
@@ -14,40 +26,42 @@ public class Home{
        btntemp= new JButton("Temporary stuff");
        btntempstaff= new JButton("Tempstaff");
 
-       frame.setVisible (true);
-       frame.setSize(300,200);
-       frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);
-       frame.setLayout(new FlowLayout());
+       //nav.setLayout(new GridLayout(2,2,20,50));
+       nav.setLayout(new FlowLayout());
+       buttonPanel.setLayout(new GridLayout(2,2,20,50));
+       buttonPanel.add(btncreate);
+       buttonPanel.add(btnview);
+       buttonPanel.add(btnemployee);
+       buttonPanel.add(btntemp);
+       buttonPanel.add(btntempstaff);
+       //nav.add(btnexit);
+       nav.add(buttonPanel);
 
-       frame.add(btncreate);
-       frame.add(btnview);
-       frame.add(btnemployee);
-       frame.add(btntemp);
-       frame.add(btntempstaff);
-       frame.add(btnexit);
-
+       add(homeLabel, BorderLayout.NORTH);
+       add(nav, BorderLayout.CENTER);
+       add(btnexit, BorderLayout.SOUTH);
        btnview.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e){
             new View();
-            frame.dispose();
+            dispose();
         }
        });
        btnemployee.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e){
             new Employee();
-            frame.dispose();
+            dispose();
         }
        });
        btntemp.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e){
             new Temp();
-            frame.dispose();
+            dispose();
         }
        });
        btntempstaff.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e){
             new TempStaff();
-            frame.dispose();
+            dispose();
         }
        });
        
@@ -59,6 +73,5 @@ public class Home{
     }
     public static void main (String []args){
         new Home();
-
     }
 }

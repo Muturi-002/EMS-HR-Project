@@ -4,16 +4,14 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 
-public class View extends JFrame {
+public class View extends Standard {
 
     private JTable employeeTable;
     private JButton tempStaffButton;
 
     public View() {
         setTitle("Employee Records");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 400);
-        setLocationRelativeTo(null);
+
 
         // Table Column Names - replace/add as per your Employees table
         String[] columnNames = {"ID", "Name", "Position", "Department", "Type"};

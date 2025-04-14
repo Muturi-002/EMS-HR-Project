@@ -1,5 +1,5 @@
 package org.example.HR;
-import org.example.Welcome;//imports the Welcome class from the parent package (org.example)
+import org.example.Home;
 import org.example.Standard;//imports the Standard class from the parent package (org.example)
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -24,8 +24,6 @@ public class Auth extends Standard implements ActionListener {
         this.setTitle("HR Staff Authentication");
         this.setLayout(new BorderLayout(20, 20));
 
-        int width = Toolkit.getDefaultToolkit().getScreenSize().width;
-        int height = Toolkit.getDefaultToolkit().getScreenSize().height;
         this.setVisible(true);
         auth.setOpaque(true);
         auth.setBackground(Color.lightGray);
@@ -36,22 +34,19 @@ public class Auth extends Standard implements ActionListener {
         pass.setOpaque(true);
         pass.setHorizontalAlignment(JLabel.LEFT);
         pass.setBackground(Color.lightGray);
-        user.setHorizontalTextPosition(SwingConstants.CENTER);
-        user.setVerticalTextPosition(SwingConstants.CENTER);
-        pass.setHorizontalTextPosition(SwingConstants.CENTER);
-        pass.setVerticalTextPosition(SwingConstants.CENTER);
+//        user.setHorizontalTextPosition(SwingConstants.CENTER);
+//        user.setVerticalTextPosition(SwingConstants.CENTER);
+//        pass.setHorizontalTextPosition(SwingConstants.CENTER);
+//        pass.setVerticalTextPosition(SwingConstants.CENTER);
 
         authPanel.setBackground(Color.GRAY);
         authPanel.setPreferredSize(new Dimension(500, 400));
         authPanel.setLayout(new GridLayout(3, 1));
         authPanel.add(userPanel);
         authPanel.add(passPanel);
-        confirm.setBounds(0, 0, 70, 50);
+        confirm.setBounds(300,200 , 70, 50);
         authPanel.add(confirm);
 
-        leftPanel.setPreferredSize(new Dimension(300, height));
-        rightPanel.setPreferredSize(new Dimension(300, height));
-        bottomPanel.setPreferredSize(new Dimension(width, 300));
         userPanel.add(user);
         userPanel.add(username);
         passPanel.add(pass);
@@ -72,11 +67,11 @@ public class Auth extends Standard implements ActionListener {
             System.out.println("Username: " + userText);
             System.out.println("Password: " + passText);
             if (userText.equals("admin") && passText.equals("admin")) {
-                System.out.println("Authentication Successful");
+                //System.out.println("Authentication Successful");
+                JOptionPane.showMessageDialog(null, "Authentication Successful");
                 this.dispose();
-                Welcome welcome = new Welcome();
+                Home welcome = new Home();
             } else {
-                System.out.println("Authentication Failed");
                 JOptionPane.showMessageDialog(this, "Invalid Username or Password", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
