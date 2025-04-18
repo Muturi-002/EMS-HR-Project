@@ -43,25 +43,25 @@ public class Home extends JFrame{
        btnview.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e){
             new View();
-            dispose();
+
         }
        });
        btnemployee.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e){
             new Employee();
-            dispose();
+
         }
        });
        btntemp.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e){
             new Temp();
-            dispose();
+
         }
        });
        btntempstaff.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e){
             new TempStaff();
-            dispose();
+
         }
        });
        

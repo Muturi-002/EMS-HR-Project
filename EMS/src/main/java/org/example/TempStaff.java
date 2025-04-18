@@ -6,10 +6,10 @@ import java.awt.event.ActionListener;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class TempStaff extends JFrame implements ActionListener {
+public class TempStaff extends Standard implements ActionListener {
 
-    private JTextField firstNameField, middleNameField, lastNameField, nationalIdField, addressField, disabilitiesField, kraPinField, departmentDivisionField, yearOfBirthField;
-    private JComboBox<String> workLevelCombo;
+    private JTextField firstNameField, middleNameField, lastNameField, nationalIdField, addressField, kraPinField, departmentDivisionField, yearOfBirthField;
+    private JComboBox<String> workLevelCombo, disabilitiesCombo;
     private JLabel kraPinLabel;
     private JButton saveButton;
 
@@ -17,10 +17,7 @@ public class TempStaff extends JFrame implements ActionListener {
 
     public TempStaff() {
         setTitle("Temporary Staff Registration");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(11, 2, 10, 10));
-        setPreferredSize(new Dimension(450, 480)); // Slightly larger
-        setLocationRelativeTo(null);
 
         // Labels and Input Fields
         add(new JLabel("First Name:"));
@@ -54,8 +51,9 @@ public class TempStaff extends JFrame implements ActionListener {
         add(addressField);
 
         add(new JLabel("Disabilities (if any):"));
-        disabilitiesField = new JTextField();
-        add(disabilitiesField);
+        String[] disab = {"Yes", "No"};
+        disabilitiesCombo = new JComboBox<>(disab);
+        add(disabilitiesCombo);
 
         kraPinLabel = new JLabel("KRA PIN (Interns only):");
         add(kraPinLabel);
@@ -72,7 +70,6 @@ public class TempStaff extends JFrame implements ActionListener {
         add(saveButton);
 
         updateKraPinVisibility();
-        pack();
         setVisible(true);
     }
 
@@ -94,7 +91,7 @@ public class TempStaff extends JFrame implements ActionListener {
             String yearOfBirthText = yearOfBirthField.getText().trim();
             String nationalId = nationalIdField.getText().trim();
             String address = addressField.getText().trim();
-            String disabilities = disabilitiesField.getText().trim();
+            String disabilities = (String) disabilitiesCombo.getSelectedItem();
             String kraPin = kraPinField.getText().trim();
             String departmentDivision = departmentDivisionField.getText().trim();
 
@@ -144,7 +141,7 @@ public class TempStaff extends JFrame implements ActionListener {
         yearOfBirthField.setText("");
         nationalIdField.setText("");
         addressField.setText("");
-        disabilitiesField.setText("");
+        disabilitiesCombo.setSelectedIndex(0);
         kraPinField.setText("");
         departmentDivisionField.setText("");
         workLevelCombo.setSelectedIndex(0);
