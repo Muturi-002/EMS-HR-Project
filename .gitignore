@@ -15,4 +15,6 @@
 *target/
 ###Test Database directory
 *testdb/
-*.env
+
+## Excluding database 'push' to repo. Using test data to validate connection
+*sql
