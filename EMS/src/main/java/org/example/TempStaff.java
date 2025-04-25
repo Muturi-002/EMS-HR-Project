@@ -1,23 +1,31 @@
-package org.example;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
-public class TempStaff extends Standard implements ActionListener {
+public class TempStaffGUI extends JFrame implements ActionListener {
 
-    private JTextField firstNameField, middleNameField, lastNameField, nationalIdField, addressField, kraPinField, departmentDivisionField, yearOfBirthField;
-    private JComboBox<String> workLevelCombo, disabilitiesCombo;
+    private JTextField firstNameField, middleNameField, lastNameField, nationalIdField, addressField, disabilitiesField,
+            kraPinField, departmentDivisionField, yearOfBirthField;
+    private JComboBox<String> workLevelCombo;
     private JLabel kraPinLabel;
     private JButton saveButton;
 
-    private static final String DATA_FILE = "temp_staff_records.txt"; 
+    // Database credentials (replace with your actual credentials)
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/your_database_name";
+    private static final String DB_USER = "your_mysql_username";
+    private static final String DB_PASSWORD = "your_mysql_password";
 
-    public TempStaff() {
+    public TempStaffGUI() {
         setTitle("Temporary Staff Registration");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(11, 2, 10, 10));
+        setPreferredSize(new Dimension(450, 480));
+        setLocationRelativeTo(null);
 
         // Labels and Input Fields
         add(new JLabel("First Name:"));
@@ -33,7 +41,7 @@ public class TempStaff extends Standard implements ActionListener {
         add(lastNameField);
 
         add(new JLabel("Work Level (Intern/Attache):"));
-        String[] workLevels = {"Intern", "Attache"};
+        String[] workLevels = { "Intern", "Attache" };
         workLevelCombo = new JComboBox<>(workLevels);
         workLevelCombo.addActionListener(this);
         add(workLevelCombo);
@@ -51,9 +59,8 @@ public class TempStaff extends Standard implements ActionListener {
         add(addressField);
 
         add(new JLabel("Disabilities (if any):"));
-        String[] disab = {"Yes", "No"};
-        disabilitiesCombo = new JComboBox<>(disab);
-        add(disabilitiesCombo);
+        disabilitiesField = new JTextField();
+        add(disabilitiesField);
 
         kraPinLabel = new JLabel("KRA PIN (Interns only):");
         add(kraPinLabel);
@@ -70,6 +77,7 @@ public class TempStaff extends Standard implements ActionListener {
         add(saveButton);
 
         updateKraPinVisibility();
+        pack();
         setVisible(true);
     }
 
@@ -91,13 +99,16 @@ public class TempStaff extends Standard implements ActionListener {
             String yearOfBirthText = yearOfBirthField.getText().trim();
             String nationalId = nationalIdField.getText().trim();
             String address = addressField.getText().trim();
-            String disabilities = (String) disabilitiesCombo.getSelectedItem();
+            String disabilities = disabilitiesField.getText().trim();
             String kraPin = kraPinField.getText().trim();
             String departmentDivision = departmentDivisionField.getText().trim();
 
             // Basic Validation
-            if (firstName.isEmpty() || lastName.isEmpty() || yearOfBirthText.isEmpty() || nationalId.isEmpty() || departmentDivision.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Please fill in all required fields (First Name, Last Name, Year of Birth, National ID, Department-Division).", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            if (firstName.isEmpty() || lastName.isEmpty() || yearOfBirthText.isEmpty() || nationalId.isEmpty()
+                    || departmentDivision.isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Please fill in all required fields (First Name, Last Name, Year of Birth, National ID, Department-Division).",
+                        "Validation Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -108,27 +119,40 @@ public class TempStaff extends Standard implements ActionListener {
                     throw new NumberFormatException();
                 }
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Invalid Year of Birth. Please enter a valid year.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Invalid Year of Birth. Please enter a valid year.",
+                        "Validation Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             if (workLevel.equals("Intern") && kraPin.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "KRA PIN is required for Interns.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "KRA PIN is required for Interns.", "Validation Error",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            // Create the record string
-            String record = String.format("%s,%s,%s,%s,%d,%s,%s,%s,%s,%s%n",
-                    firstName, middleName, lastName, workLevel, year, nationalId, address, disabilities.isEmpty() ? "N/A" : disabilities,
-                    workLevel.equals("Intern") ? kraPin : "N/A", departmentDivision);
+            // Save the record to the database
+            try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+                String sql = "INSERT INTO temp_staff (first_name, middle_name, last_name, work_level, year_of_birth, national_id, address, disabilities, kra_pin, department_division) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                pstmt.setString(1, firstName);
+                pstmt.setString(2, middleName);
+                pstmt.setString(3, lastName);
+                pstmt.setString(4, workLevel);
+                pstmt.setInt(5, year);
+                pstmt.setString(6, nationalId);
+                pstmt.setString(7, address);
+                pstmt.setString(8, disabilities.isEmpty() ? "N/A" : disabilities);
+                pstmt.setString(9, workLevel.equals("Intern") ? kraPin : "N/A");
+                pstmt.setString(10, departmentDivision);
 
-            // Save the record to a file
-            try (FileWriter fw = new FileWriter(DATA_FILE, true)) {
-                fw.write(record);
-                JOptionPane.showMessageDialog(this, "Temporary Staff Record Saved Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                pstmt.executeUpdate();
+                JOptionPane.showMessageDialog(this, "Temporary Staff Record Saved Successfully!", "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
                 clearFields();
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this, "Error saving record to file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error saving record to database: " + ex.getMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace(); // For debugging
             }
         }
@@ -141,13 +165,13 @@ public class TempStaff extends Standard implements ActionListener {
         yearOfBirthField.setText("");
         nationalIdField.setText("");
         addressField.setText("");
-        disabilitiesCombo.setSelectedIndex(0);
+        disabilitiesField.setText("");
         kraPinField.setText("");
         departmentDivisionField.setText("");
         workLevelCombo.setSelectedIndex(0);
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new TempStaff());
+        SwingUtilities.invokeLater(() -> new TempStaffGUI());
     }
 }
