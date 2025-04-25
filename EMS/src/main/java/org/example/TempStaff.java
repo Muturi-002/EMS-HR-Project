@@ -6,25 +6,27 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class TempStaffGUI extends JFrame implements ActionListener {
 
-    private JTextField firstNameField, middleNameField, lastNameField, nationalIdField, addressField, disabilitiesField,
-            kraPinField, departmentDivisionField, yearOfBirthField;
-    private JComboBox<String> workLevelCombo;
+    private JTextField firstNameField, middleNameField, lastNameField, nationalIdField, addressField, kraPinField, departmentDivisionField, yearOfBirthField;
+    private JComboBox<String> workLevelCombo, disabilitiesCombo;
     private JLabel kraPinLabel;
     private JButton saveButton;
 
     // Database credentials (replace with your actual credentials)
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/your_database_name";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/EMS"; // Assuming database name is EMS
     private static final String DB_USER = "your_mysql_username";
     private static final String DB_PASSWORD = "your_mysql_password";
 
     public TempStaffGUI() {
         setTitle("Temporary Staff Registration");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridLayout(11, 2, 10, 10));
-        setPreferredSize(new Dimension(450, 480));
+        setLayout(new GridLayout(12, 2, 10, 10)); // Increased rows for disabilities
+        setPreferredSize(new Dimension(450, 520)); // Adjusted height
         setLocationRelativeTo(null);
 
         // Labels and Input Fields
@@ -41,12 +43,12 @@ public class TempStaffGUI extends JFrame implements ActionListener {
         add(lastNameField);
 
         add(new JLabel("Work Level (Intern/Attache):"));
-        String[] workLevels = { "Intern", "Attache" };
+        String[] workLevels = {"Intern", "Attache"};
         workLevelCombo = new JComboBox<>(workLevels);
         workLevelCombo.addActionListener(this);
         add(workLevelCombo);
 
-        add(new JLabel("Year of Birth:"));
+        add(new JLabel("Year of Birth (YYYY-MM-DD):")); // Updated format
         yearOfBirthField = new JTextField();
         add(yearOfBirthField);
 
@@ -58,16 +60,17 @@ public class TempStaffGUI extends JFrame implements ActionListener {
         addressField = new JTextField();
         add(addressField);
 
-        add(new JLabel("Disabilities (if any):"));
-        disabilitiesField = new JTextField();
-        add(disabilitiesField);
+        add(new JLabel("Disabilities (YES/NO):")); // Updated to ENUM values
+        String[] disabilitiesOptions = {"NO", "YES"};
+        disabilitiesCombo = new JComboBox<>(disabilitiesOptions);
+        add(disabilitiesCombo);
 
         kraPinLabel = new JLabel("KRA PIN (Interns only):");
         add(kraPinLabel);
         kraPinField = new JTextField();
         add(kraPinField);
 
-        add(new JLabel("Department-Division:"));
+        add(new JLabel("Department-Division ID:")); // Changed to Division ID
         departmentDivisionField = new JTextField();
         add(departmentDivisionField);
 
@@ -99,60 +102,58 @@ public class TempStaffGUI extends JFrame implements ActionListener {
             String yearOfBirthText = yearOfBirthField.getText().trim();
             String nationalId = nationalIdField.getText().trim();
             String address = addressField.getText().trim();
-            String disabilities = disabilitiesField.getText().trim();
+            String disabilities = (String) disabilitiesCombo.getSelectedItem(); // Get from combo box
             String kraPin = kraPinField.getText().trim();
-            String departmentDivision = departmentDivisionField.getText().trim();
+            String departmentDivisionText = departmentDivisionField.getText().trim();
 
             // Basic Validation
-            if (firstName.isEmpty() || lastName.isEmpty() || yearOfBirthText.isEmpty() || nationalId.isEmpty()
-                    || departmentDivision.isEmpty()) {
-                JOptionPane.showMessageDialog(this,
-                        "Please fill in all required fields (First Name, Last Name, Year of Birth, National ID, Department-Division).",
-                        "Validation Error", JOptionPane.ERROR_MESSAGE);
+            if (firstName.isEmpty() || lastName.isEmpty() || yearOfBirthText.isEmpty() || nationalId.isEmpty() || departmentDivisionText.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please fill in all required fields (First Name, Last Name, Year of Birth, National ID, Department-Division).", "Validation Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            int year;
+            LocalDate yearOfBirth;
             try {
-                year = Integer.parseInt(yearOfBirthText);
-                if (year <= 1900 || year > 2099) { // Basic year range check
-                    throw new NumberFormatException();
-                }
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Invalid Year of Birth. Please enter a valid year.",
-                        "Validation Error", JOptionPane.ERROR_MESSAGE);
+                 yearOfBirth = LocalDate.parse(yearOfBirthText, DateTimeFormatter.ISO_DATE); // Use LocalDate
+            } catch (DateTimeParseException ex) {
+                JOptionPane.showMessageDialog(this, "Invalid Year of Birth. Please enter a valid date in YYYY-MM-DD format.", "Validation Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             if (workLevel.equals("Intern") && kraPin.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "KRA PIN is required for Interns.", "Validation Error",
-                        JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "KRA PIN is required for Interns.", "Validation Error", JOptionPane.ERROR_MESSAGE);
                 return;
+            }
+
+            int departmentDivision;
+            try {
+                departmentDivision = Integer.parseInt(departmentDivisionText);
+            } catch (NumberFormatException ex) {
+                 JOptionPane.showMessageDialog(this, "Invalid Department-Division ID. Please enter a valid integer.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                 return;
             }
 
             // Save the record to the database
             try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-                String sql = "INSERT INTO temp_staff (first_name, middle_name, last_name, work_level, year_of_birth, national_id, address, disabilities, kra_pin, department_division) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                PreparedStatement pstmt = conn.prepareStatement(sql);
-                pstmt.setString(1, firstName);
-                pstmt.setString(2, middleName);
-                pstmt.setString(3, lastName);
-                pstmt.setString(4, workLevel);
-                pstmt.setInt(5, year);
-                pstmt.setString(6, nationalId);
-                pstmt.setString(7, address);
-                pstmt.setString(8, disabilities.isEmpty() ? "N/A" : disabilities);
-                pstmt.setString(9, workLevel.equals("Intern") ? kraPin : "N/A");
-                pstmt.setString(10, departmentDivision);
+                 String sql = "INSERT INTO Temporary (FirstName, MiddleName, LastName, WorkLevel, YearOfBirth, NationalIDNo, PhysicalAddress, Disabilities, KRAPIN, DepartmentDivision) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; // Updated Table name
+                 PreparedStatement pstmt = conn.prepareStatement(sql);
+                 pstmt.setString(1, firstName);
+                 pstmt.setString(2, middleName);
+                 pstmt.setString(3, lastName);
+                 pstmt.setString(4, workLevel);
+                 pstmt.setObject(5, yearOfBirth); // Store as LocalDate
+                 pstmt.setString(6, nationalId);
+                 pstmt.setString(7, address);
+                 pstmt.setString(8, disabilities); // Use value from combo box
+                 pstmt.setString(9, workLevel.equals("Intern") ? kraPin : null); // Handle KRAPIN for Attache
+                 pstmt.setInt(10, departmentDivision); // Store DepartmentDivision ID
 
                 pstmt.executeUpdate();
-                JOptionPane.showMessageDialog(this, "Temporary Staff Record Saved Successfully!", "Success",
-                        JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Temporary Staff Record Saved Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 clearFields();
 
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Error saving record to database: " + ex.getMessage(), "Error",
-                        JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error saving record to database: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace(); // For debugging
             }
         }
@@ -165,7 +166,7 @@ public class TempStaffGUI extends JFrame implements ActionListener {
         yearOfBirthField.setText("");
         nationalIdField.setText("");
         addressField.setText("");
-        disabilitiesField.setText("");
+        disabilitiesCombo.setSelectedIndex(0);
         kraPinField.setText("");
         departmentDivisionField.setText("");
         workLevelCombo.setSelectedIndex(0);
