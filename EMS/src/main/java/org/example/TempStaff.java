@@ -1,3 +1,4 @@
+package org.example;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,24 +11,21 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class TempStaffGUI extends JFrame implements ActionListener {
+public class TempStaff extends Standard implements ActionListener {
 
     private JTextField firstNameField, middleNameField, lastNameField, nationalIdField, addressField, kraPinField, departmentDivisionField, yearOfBirthField;
     private JComboBox<String> workLevelCombo, disabilitiesCombo;
     private JLabel kraPinLabel;
-    private JButton saveButton;
+    private JButton saveButton,btnexit;
 
     // Database credentials (replace with your actual credentials)
     private static final String DB_URL = "jdbc:mysql://localhost:3306/EMS"; // Assuming database name is EMS
     private static final String DB_USER = "your_mysql_username";
     private static final String DB_PASSWORD = "your_mysql_password";
 
-    public TempStaffGUI() {
+    public TempStaff() {
         setTitle("Temporary Staff Registration");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(12, 2, 10, 10)); // Increased rows for disabilities
-        setPreferredSize(new Dimension(450, 520)); // Adjusted height
-        setLocationRelativeTo(null);
 
         // Labels and Input Fields
         add(new JLabel("First Name:"));
@@ -78,10 +76,17 @@ public class TempStaffGUI extends JFrame implements ActionListener {
         saveButton.addActionListener(this);
         add(new JLabel("")); // Empty label for alignment
         add(saveButton);
+        add(new JLabel("")); // Empty label for alignment
+        add(btnexit = new JButton("Exit"));
+        btnexit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                //new Home();
+            }
+        });
 
         updateKraPinVisibility();
-        pack();
-        setVisible(true);
     }
 
     private void updateKraPinVisibility() {
@@ -173,6 +178,6 @@ public class TempStaffGUI extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new TempStaffGUI());
+        SwingUtilities.invokeLater(() -> new TempStaff());
     }
 }

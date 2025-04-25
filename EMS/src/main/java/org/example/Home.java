@@ -9,9 +9,11 @@ public class Home extends JFrame{
     JPanel nav=new JPanel();
     JPanel buttonPanel=new JPanel();
     public Home(){
+       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
        this.setTitle("Home Page");
        this.setLayout(new BorderLayout(20,20));
+       this.setVisible(true);
        int width= Toolkit.getDefaultToolkit().getScreenSize().width;
        homeLabel.setPreferredSize(new Dimension(width,100));
        homeLabel.setOpaque(true);
@@ -20,15 +22,15 @@ public class Home extends JFrame{
        homeLabel.setFont(new Font("Arial", Font.BOLD,20));
 
        btncreate= new JButton("Create Record");
-       btnview= new JButton("View Record");
+       btnview= new JButton("View Employee Details (Contract)");
        btnexit= new JButton("Exit");
-       btnemployee = new JButton("Employee");
+       btnemployee = new JButton("Add Employee");
        btntemp= new JButton("Temporary stuff");
-       btntempstaff= new JButton("Tempstaff");
+       btntempstaff= new JButton("View Temporary Staff Details");
 
        //nav.setLayout(new GridLayout(2,2,20,50));
        nav.setLayout(new FlowLayout());
-       buttonPanel.setLayout(new GridLayout(2,2,20,50));
+       buttonPanel.setLayout(new GridLayout(5,1,20,50));
        buttonPanel.add(btncreate);
        buttonPanel.add(btnview);
        buttonPanel.add(btnemployee);
