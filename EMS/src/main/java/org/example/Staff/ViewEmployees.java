@@ -1,16 +1,18 @@
-package org.example;
+package org.example.Staff;
+
+import org.example.Standard;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 
-public class View extends Standard {
+public class ViewEmployees extends Standard {
 
     private JTable employeeTable;
     private JButton tempStaffButton;
 
-    public View() {
-        setTitle("Employee Records");
+    public ViewEmployees() {
+        setTitle("View Employee Records");
 
 
         // Table Column Names - replace/add as per your Employees table
@@ -59,7 +61,7 @@ public class View extends Standard {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new View());
+        SwingUtilities.invokeLater(() -> new ViewEmployees());
     }
 }
 

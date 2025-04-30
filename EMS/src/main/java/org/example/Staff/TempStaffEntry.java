@@ -1,4 +1,6 @@
-package org.example;
+package org.example.Staff;
+
+import org.example.Standard;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,7 +13,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class TempStaff extends Standard implements ActionListener {
+public class TempStaffEntry extends Standard implements ActionListener {
 
     private JTextField firstNameField, middleNameField, lastNameField, nationalIdField, addressField, kraPinField, departmentDivisionField, yearOfBirthField;
     private JComboBox<String> workLevelCombo, disabilitiesCombo;
@@ -23,7 +25,7 @@ public class TempStaff extends Standard implements ActionListener {
     private static final String DB_USER = "your_mysql_username";
     private static final String DB_PASSWORD = "your_mysql_password";
 
-    public TempStaff() {
+    public TempStaffEntry() {
         setTitle("Temporary Staff Registration");
         setLayout(new GridLayout(12, 2, 10, 10)); // Increased rows for disabilities
 
@@ -176,8 +178,7 @@ public class TempStaff extends Standard implements ActionListener {
         departmentDivisionField.setText("");
         workLevelCombo.setSelectedIndex(0);
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new TempStaff());
-    }
+    static{
+        SwingUtilities.invokeLater(() -> new TempStaffEntry());
+    };
 }

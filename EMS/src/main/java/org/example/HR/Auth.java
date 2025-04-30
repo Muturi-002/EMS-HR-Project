@@ -1,4 +1,6 @@
 package org.example.HR;
+
+import org.example.DB.Database;
 import org.example.Home;
 import org.example.Standard;//imports the Standard class from the parent package (org.example)
 import java.awt.*;
@@ -70,7 +72,7 @@ public class Auth extends Standard implements ActionListener {
                 //System.out.println("Authentication Successful");
                 JOptionPane.showMessageDialog(null, "Authentication Successful");
                 this.dispose();
-                Home welcome = new Home();
+                new Home();
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid Username or Password", "Error", JOptionPane.ERROR_MESSAGE);
             }

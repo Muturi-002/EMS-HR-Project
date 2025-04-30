@@ -1,19 +1,21 @@
-package org.example;
+package org.example.Staff;
+
+import org.example.Standard;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Employee extends Standard{
+public class EmployeeEntry extends Standard{
     private JPanel panel;
     private JLabel lblFirstName, lblMiddleName, lblLastName, lblNationalId, lblAddress, lblKraPin, lblDepartmentDivision, lblYearOfBirth, lblDisabilities;
     private JTextField firstNameField, middleNameField, lastNameField, nationalIdField, addressField, kraPinField, departmentDivisionField, yearOfBirthField;
     private JComboBox<String> disabilitiesCombo;
     private JButton btnSave, btnClear;
 
-    public Employee() {
+    public EmployeeEntry() {
         // Create the frame
-        setTitle("Add New Employee");
+        setTitle("Add a New/Existing Employee");
 
         // Create the panel
         panel = new JPanel();
@@ -105,7 +107,7 @@ public class Employee extends Standard{
         if (fName.isEmpty() || mName.isEmpty() || lName.isEmpty() || yearBirth.isEmpty() || nationalId.isEmpty() || address.isEmpty() || kraPin.isEmpty() || departmentDivision.isEmpty()) {
             JOptionPane.showMessageDialog(null, "All fields must be filled!", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(null, "Employee saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "New Employee record saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
             // Here you can add code to save the employee info to a database or a file
         }
     }
@@ -127,7 +129,7 @@ public class Employee extends Standard{
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new Employee();
+                new EmployeeEntry();
             }
         });
     }

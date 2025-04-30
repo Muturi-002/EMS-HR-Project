@@ -2,6 +2,7 @@ package org.example;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+import org.example.Staff.*;
 
 public class Home extends JFrame{
     JButton btnview, btncreate, btnexit,btnemployee,btntemp,btntempstaff;
@@ -21,8 +22,8 @@ public class Home extends JFrame{
        homeLabel.setHorizontalAlignment(SwingConstants.CENTER);
        homeLabel.setFont(new Font("Arial", Font.BOLD,20));
 
-       btncreate= new JButton("Create Record");
-       btnview= new JButton("View Employee Details (Contract)");
+       btncreate= new JButton("Create Record");//Refactor it.
+       btnview= new JButton("View Employees' Details (Contract)");
        btnexit= new JButton("Exit");
        btnemployee = new JButton("Add Employee");
        btntemp= new JButton("Temporary stuff");
@@ -44,25 +45,25 @@ public class Home extends JFrame{
        add(btnexit, BorderLayout.SOUTH);
        btnview.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e){
-            new View();
+            new ViewEmployees();
 
         }
        });
        btnemployee.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e){
-            new Employee();
+            new EmployeeEntry();
 
         }
        });
        btntemp.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e){
-            new Temp();
+            new ViewTempStaff();
 
         }
        });
        btntempstaff.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e){
-            new TempStaff();
+            new TempStaffEntry();
 
         }
        });

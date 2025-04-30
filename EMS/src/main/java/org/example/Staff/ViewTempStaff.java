@@ -1,16 +1,16 @@
-package org.example;
+package org.example.Staff;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.*;
+import org.example.Standard;
 
-public class Temp extends Standard {
+public class ViewTempStaff extends Standard {
 
     private JTable tempTable;
 
-    public Temp() {
-        setTitle("Temporary Staff Records");
+    public ViewTempStaff() {
+        setTitle("View Temporary Staff's Records");
 
 
         // Table Columns
@@ -33,6 +33,6 @@ public class Temp extends Standard {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Temp());
+        SwingUtilities.invokeLater(() -> new ViewTempStaff());
     }
 }
