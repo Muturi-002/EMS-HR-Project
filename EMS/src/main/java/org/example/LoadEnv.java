@@ -10,13 +10,13 @@ public class LoadEnv {
 
     // Static initializer block to load properties when the class is loaded
     static {
-        // Load the properties file from its absolute path
-        try (FileInputStream fis = new FileInputStream("<replace with absolute path to the 'filename'.properties file>");) {
-            if (fis == null) {
+        // Load the properties file from its absolute path. Replace the filepath value with the correct path to your app.properties file.
+        try (FileInputStream filepath = new FileInputStream("/home/muturiiii/Desktop/Y3S2 Project/EMS-HR-Project/EMS/src/main/java/org/example/app.properties");) {
+            if (filepath == null) {
                 System.err.println("Error: app.properties file not found in package.");
                 throw new RuntimeException("app.properties file not found");
             }
-            properties.load(fis);
+            properties.load(filepath);
         } catch (IOException e) {
             System.err.println("Error loading app.properties: " + e.getMessage());
             e.printStackTrace();
@@ -36,27 +36,21 @@ public class LoadEnv {
         return properties.getProperty("Port");
     }
 
-    public static String getDatabaseName() {
-        return properties.getProperty("database_name");
+    public static String getDatabaseUser() {
+        return properties.getProperty("database_user");
     }
 
     public static String getDatabasePassword() {
         return properties.getProperty("database_password");
     }
-
+    public static String getDatabaseName() {
+        return properties.getProperty("database_name");
+    }
     public static String getAppUsername() {
         return properties.getProperty("App_username");
     }
 
     public static String getAppPassword() { // Corrected method name
         return properties.getProperty("username_password");
-    }
-
-    public static void main(String[] args) {
-        // Example Usage
-        System.out.println("IP Address: " + getIP());
-        System.out.println("Port: " + getPort());
-        System.out.println("Database Name: " + getDatabaseName());
-        System.out.println("File path to environment variables: " + getFilePath());
     }
 }

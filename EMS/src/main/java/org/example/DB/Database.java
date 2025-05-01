@@ -4,8 +4,13 @@ import java.sql.*;
 import org.example.LoadEnv;
 
 public class Database {
-    Connection conn ;
+    static Connection conn ;
     Statement stmt;
+    String ipAddress = LoadEnv.getIP();
+    String port = LoadEnv.getPort();
+    String databaseUser = LoadEnv.getDatabaseUser();
+    String databasePassword = LoadEnv.getDatabasePassword();
+    String url= "jdbc:mysql://"+ipAddress+":"+port;
     public Database() {
         try {
             createDatabase();
@@ -16,7 +21,7 @@ public class Database {
     }
     private void createDatabase(){
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "12345678");
+            conn = DriverManager.getConnection(url, databaseUser, databasePassword);
             stmt = conn.createStatement();
             String checkDB = "SHOW DATABASES";
             ResultSet rs = stmt.executeQuery(checkDB);
