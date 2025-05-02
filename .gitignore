@@ -16,9 +16,6 @@
 ###Test Database directory
 *testdb/
 
-## Excluding database 'push' to repo. Using test data to validate connection
-*sql
-
-## Ensure app.properties file is no longer pushed
+##Ensure app.properties file is no longer pushed
 *app.properties
 
