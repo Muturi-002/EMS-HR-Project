@@ -10,7 +10,8 @@ public class Database {
     String port = LoadEnv.getPort();
     String databaseUser = LoadEnv.getDatabaseUser();
     String databasePassword = LoadEnv.getDatabasePassword();
-    String url= "jdbc:mysql://"+ipAddress+":"+port;
+    String databaseName = LoadEnv.getDatabaseName();
+    String url= "jdbc:mysql://"+ipAddress+":"+port+"/";
     public Database() {
         try {
             createDatabase();
@@ -23,33 +24,38 @@ public class Database {
         try {
             conn = DriverManager.getConnection(url, databaseUser, databasePassword);
             stmt = conn.createStatement();
-            String checkDB = "SHOW DATABASES";
-            ResultSet rs = stmt.executeQuery(checkDB);
-            if (rs.next()) {
-                System.out.println("Database EMS already exists.\n\n");
-                stmt.executeUpdate("USE EMS");
-            } else {
-                String createDB = "CREATE DATABASE EMS";
-                stmt.executeUpdate(createDB);
-                System.out.println("Database EMS created successfully.\n\n");
-                stmt.executeUpdate("USE EMS");
-            }
-            conn= DriverManager.getConnection("jdbc:mysql://localhost:3306/EMS", "root", "12345678");
+            String dropDB = "DROP DATABASE IF EXISTS " + databaseName;
+            stmt.executeUpdate(dropDB);
+            String createDB = "CREATE DATABASE " + databaseName;
+            stmt.executeUpdate(createDB);
+            System.out.println("Database "+databaseName+" created successfully. Now using it.");
+            stmt.executeUpdate("USE EMS");
+            conn= DriverManager.getConnection(url+databaseName, databaseUser, databasePassword);
         }catch (Exception e){
             e.printStackTrace();
         }
     }
     private void createTables(){
         try {
+            stmt.execute("SET FOREIGN_KEY_CHECKS = 0");
+            ResultSet rs = stmt.executeQuery("SHOW TABLES");
+            // Drop all existing tables
+            while (rs.next()) {
+                String tableName = rs.getString(1);
+                System.out.println("Dropped table: " + tableName);
+                String dropSQL = "DROP TABLE IF EXISTS `" + tableName + "`";
+                stmt.executeUpdate(dropSQL);
+            }
+            //New tables
             String departmentTable = (
-                    "CREATE TABLE IF NOT EXISTS Departments (" +
+                    "CREATE TABLE Departments (" +
                             "DepartmentCode INT PRIMARY KEY AUTO_INCREMENT," +
                             "DepartmentName VARCHAR(100) NOT NULL );"
             );
             stmt.executeUpdate(departmentTable);
             System.out.println("Department table created successfully.");
             String divisionTable = (
-                    "CREATE TABLE IF NOT EXISTS Division (" +
+                    "CREATE TABLE Division (" +
                             "DivisionID INT PRIMARY KEY AUTO_INCREMENT," +
                             "DivisionName VARCHAR(100) NOT NULL," +
                             "DepartmentID INT," +
@@ -59,7 +65,7 @@ public class Database {
             stmt.executeUpdate(divisionTable);
             System.out.println("Division table created successfully.");
             String employeeTable = (
-                    "CREATE TABLE IF NOT EXISTS Employees (" +
+                    "CREATE TABLE Employees (" +
                             "EmployeeID INT PRIMARY KEY AUTO_INCREMENT," +
                             "FirstName VARCHAR(50) NOT NULL," +
                             "MiddleName VARCHAR(50)," +
@@ -67,11 +73,10 @@ public class Database {
                             "YearOfBirth DATE NOT NULL," +
                             "NationalIDNo VARCHAR(20) UNIQUE NOT NULL," +
                             "EmailAddress VARCHAR(100) UNIQUE NOT NULL," +
-                            "PhysicalAddress TEXT NOT NULL," +
-                            "Disabilities BOOLEAN NOT NULL DEFAULT FALSE," +
+                            "PhysicalAddress TEXT ," +
+                            "Disabilities ENUM('YES', 'NO') DEFAULT 'NO'," +
                             "KRAPIN VARCHAR(20) UNIQUE NOT NULL," +
                             "DepartmentDivision INT," +
-                            "Branch VARCHAR(100) NOT NULL," +
                             "Status ENUM('Active', 'Inactive') NOT NULL DEFAULT 'Active'," +
                             "FOREIGN KEY (DepartmentDivision) REFERENCES Division(DivisionID) ON DELETE SET NULL" +
                             ");"
@@ -79,7 +84,7 @@ public class Database {
             stmt.executeUpdate(employeeTable);
             System.out.println("EmployeeEntry table created successfully.");
             String temporaryStaffTable = (
-                    "CREATE TABLE IF NOT EXISTS Temporary (" +
+                    "CREATE TABLE Temporary (" +
                             " TempID INT PRIMARY KEY AUTO_INCREMENT," +
                             " FirstName VARCHAR(50) NOT NULL," +
                             " MiddleName VARCHAR(50)," +
@@ -87,8 +92,9 @@ public class Database {
                             " WorkLevel ENUM('Intern', 'Attache') NOT NULL," +
                             " YearOfBirth DATE NOT NULL," +
                             " NationalIDNo VARCHAR(20) UNIQUE NOT NULL," +
-                            " PhysicalAddress TEXT NOT NULL," +
-                            " Disabilities ENUM('YES', 'NO') NOT NULL," +
+                            " EmailAddress VARCHAR(100) UNIQUE NOT NULL," +
+                            " PhysicalAddress TEXT ," +
+                            " Disabilities ENUM('YES', 'NO') DEFAULT 'NO'," +
                             " KRAPIN VARCHAR(20) UNIQUE," +
                             " DepartmentDivision INT," +
                             " FOREIGN KEY (DepartmentDivision) REFERENCES Division(DivisionID) ON DELETE SET NULL," +
@@ -98,7 +104,7 @@ public class Database {
             stmt.executeUpdate(temporaryStaffTable);
             System.out.println("Temporary staff table created successfully.");
             String attendanceTable = (
-                    "CREATE TABLE IF NOT EXISTS Attendance (" +
+                    "CREATE TABLE Attendance (" +
                             "AttendanceID INT PRIMARY KEY AUTO_INCREMENT," +
                             "EmployeeID INT," +
                             "Date DATE NOT NULL," +
@@ -109,7 +115,7 @@ public class Database {
             stmt.executeUpdate(attendanceTable);
             System.out.println("Attendance table created successfully.");
             String leaveTable = (
-                    "CREATE TABLE IF NOT EXISTS LeaveRequests (" +
+                    "CREATE TABLE LeaveRequests (" +
                             "LeaveID INT PRIMARY KEY AUTO_INCREMENT," +
                             "EmployeeID INT," +
                             "StartDate DATE NOT NULL," +
@@ -122,7 +128,7 @@ public class Database {
             stmt.executeUpdate(leaveTable);
             System.out.println("Leave requests table created successfully.");
             String authTable = (
-                    "CREATE TABLE IF NOT EXISTS Authorization (" +
+                    "CREATE TABLE Authorization (" +
                             "AuthID INT PRIMARY KEY AUTO_INCREMENT," +
                             "AssociatedEmployeeID INT NOT NULL," +
                             "Username VARCHAR(50) UNIQUE NOT NULL," +
