@@ -139,6 +139,33 @@ public class Database {
             );
             stmt.executeUpdate(authTable);
             System.out.println("Authorization table created successfully.");
+
+            String depEntries= (
+                    "INSERT INTO Departments (DepartmentName) VALUES " +
+                            "('ADMINISTRATION')," +
+                            "('CUSTOMER SERVICE & CORPORATE AFFAIRS')," +
+                            "('LEGAL AFFAIRS')," +
+                            "('FINANCE & ACCOUNTING')," +
+                            "('INFORMATION, COMMUNICATION & TECHNOLOGY');"
+            );
+            stmt.executeUpdate(depEntries);
+            String divEntries= (
+                    "INSERT INTO Division (DivisionName, DepartmentID) VALUES " +
+                            "('HUMAN RESOURCE MANAGEMENT',1)," +
+                            "('ADMINISTRATION',1)," +
+                            "('RECORDS AND ARCHIVE MANAGEMENT',1)," +
+                            "('PUBLIC RELATIONS AND MEDIA ENGAGEMENT',2)," +
+                            "('STAKEHOLDER & GOVERNMENT RELATIONS',2)," +
+                            "('LEGAL ADVISORY',3)," +
+                            "('CONTRACTS AND AGREEMENTS MANAGEMENT',3)," +
+                            "('SUPPLY CHAIN MANAGEMENT AND PROCUREMENT',4)," +
+                            "('FINANCE',4)," +
+                            "('ACCOUNTING',4)," +
+                            "('IT INFRASTRUCTURE',5)," +
+                            "('SYSTEMS DEVELOPMENT & MAINTENANCE',5),"+
+                            "('REVENUE COLLECTION & MANAGEMENT',3);"
+            );
+            stmt.executeUpdate(divEntries);
         } catch (Exception e) {
             e.printStackTrace();
         }

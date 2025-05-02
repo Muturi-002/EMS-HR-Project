@@ -6,7 +6,7 @@ import org.example.Staff.*;
 
 public class Home extends JFrame{
     JButton btnview, btncreate, btnexit,btnemployee,btntemp,btntempstaff;
-    JLabel homeLabel= new JLabel("Welcome, ");
+    JLabel homeLabel= new JLabel("Welcome, "+LoadEnv.getAppUsername());
     JPanel nav=new JPanel();
     JPanel buttonPanel=new JPanel();
     public Home(){
@@ -26,7 +26,7 @@ public class Home extends JFrame{
        btnview= new JButton("View Employees' Details (Contract)");
        btnexit= new JButton("Exit");
        btnemployee = new JButton("Add Employee");
-       btntemp= new JButton("Temporary stuff");
+       btntemp= new JButton("Add Temporary stuff");
        btntempstaff= new JButton("View Temporary Staff Details");
 
        //nav.setLayout(new GridLayout(2,2,20,50));
@@ -57,13 +57,13 @@ public class Home extends JFrame{
        });
        btntemp.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e){
-            new ViewTempStaff();
+            new TempStaffEntry();
 
         }
        });
        btntempstaff.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e){
-            new TempStaffEntry();
+            new ViewTempStaff();
 
         }
        });

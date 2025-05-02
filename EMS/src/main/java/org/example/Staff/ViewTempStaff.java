@@ -21,7 +21,6 @@ public class ViewTempStaff extends Standard {
 
     public ViewTempStaff() {
         setTitle("View Temporary Staff's Records");
-
         // Table Columns
         String[] columnNames = {"ID", "First Name", "Middle Name", "Last Name", "Work Level", "Year of Birth", "National ID", "Address", "Disabilities", "KRA PIN", "Department Division"};
 
@@ -30,7 +29,7 @@ public class ViewTempStaff extends Standard {
 
         int totalColumnWidth = 0;
         for (int i = 0; i < tempTable.getColumnCount(); i++) {
-            tempTable.getColumnModel().getColumn(i).setPreferredWidth(200); // Set a reasonable width
+            tempTable.getColumnModel().getColumn(i).setPreferredWidth(250); // Set a reasonable width
             totalColumnWidth += tempTable.getColumnModel().getColumn(i).getPreferredWidth();
         }
 
@@ -39,9 +38,7 @@ public class ViewTempStaff extends Standard {
 
         JScrollPane scrollPane = new JScrollPane(tempTable,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
-
+                JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         getContentPane().add(scrollPane, BorderLayout.CENTER);
 
         // Load data from the database

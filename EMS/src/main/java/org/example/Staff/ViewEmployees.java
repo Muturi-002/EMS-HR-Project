@@ -24,7 +24,7 @@ public class ViewEmployees extends Standard {
 
         // Table Column Names - replace/add as per your Employees table
         String[] columnNames = {"Employee ID", "First Name", "Middle Name", "Last Name", "Year of Birth", "National ID",
-                "Email Address", "Physical Address", "Disabilities", "KRA PIN", "Department Division", "Branch", "Status"};
+                "Email Address", "Physical Address", "Disabilities", "KRA PIN", "Department Division", "Status"};
 
         // Table Model
         DefaultTableModel model = new DefaultTableModel(columnNames, 0); // 0 rows initially
@@ -32,7 +32,7 @@ public class ViewEmployees extends Standard {
 
         int totalColumnWidth = 0;
         for (int i = 0; i < employeeTable.getColumnCount(); i++) {
-            employeeTable.getColumnModel().getColumn(i).setPreferredWidth(200); // Set a reasonable width
+            employeeTable.getColumnModel().getColumn(i).setPreferredWidth(250); // Set a reasonable width
             totalColumnWidth += employeeTable.getColumnModel().getColumn(i).getPreferredWidth();
         }
 
@@ -41,7 +41,7 @@ public class ViewEmployees extends Standard {
 
         JScrollPane scrollPane = new JScrollPane(employeeTable,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         tempStaffButton = new JButton("Check Temporary Staff");
         tempStaffButton.addActionListener(e -> new ViewTempStaff());
@@ -79,7 +79,6 @@ public class ViewEmployees extends Standard {
                         rs.getBoolean("Disabilities"),
                         rs.getString("KRAPIN"),
                         rs.getInt("DepartmentDivision"),
-                        rs.getString("Branch"),
                         rs.getString("Status")
                 };
                 model.addRow(row);

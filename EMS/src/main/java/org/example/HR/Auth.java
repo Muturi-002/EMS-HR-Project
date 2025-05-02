@@ -8,14 +8,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-public class Auth extends Standard implements ActionListener {
+public class Auth extends Standard implements ActionListener{
     JLabel auth = new JLabel("HR Authentication");
     JLabel user = new JLabel("Username");
     JLabel pass = new JLabel("Password");
-    JPanel authPanel = new JPanel();
-    JPanel leftPanel = new JPanel();
-    JPanel rightPanel = new JPanel();
-    JPanel bottomPanel = new JPanel();
+    JPanel authPanel = getUpperPanel();
+    JPanel leftPanel = getLeftPanel();
+    JPanel rightPanel = getRightPanel();
+    JPanel bottomPanel = getNavPanel();
     JPanel userPanel = new JPanel();
     JPanel passPanel = new JPanel();
     JButton confirm = new JButton("Confirm");
@@ -36,10 +36,6 @@ public class Auth extends Standard implements ActionListener {
         pass.setOpaque(true);
         pass.setHorizontalAlignment(JLabel.LEFT);
         pass.setBackground(Color.lightGray);
-//        user.setHorizontalTextPosition(SwingConstants.CENTER);
-//        user.setVerticalTextPosition(SwingConstants.CENTER);
-//        pass.setHorizontalTextPosition(SwingConstants.CENTER);
-//        pass.setVerticalTextPosition(SwingConstants.CENTER);
 
         authPanel.setBackground(Color.GRAY);
         authPanel.setPreferredSize(new Dimension(500, 400));
@@ -71,13 +67,14 @@ public class Auth extends Standard implements ActionListener {
             if (userText.equals("admin") && passText.equals("admin")) {
                 //System.out.println("Authentication Successful");
                 JOptionPane.showMessageDialog(null, "Authentication Successful");
-                this.dispose();
+                dispose();
                 new Home();
             } else {
-                JOptionPane.showMessageDialog(this, "Invalid Username or Password", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(auth, "Invalid Username or Password", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
+
 
     public static void main(String[] args) {
         new Auth();
