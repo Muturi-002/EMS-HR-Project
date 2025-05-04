@@ -29,15 +29,12 @@ public class EmployeeEntry extends Standard{
     String url= "jdbc:mysql://"+ipAddress+":"+port+"/"+databaseName;
 
     public EmployeeEntry() {
-        // Create the frame
         setTitle("Add a New/Existing Employee");
-        setLayout(new BorderLayout(20,20));
-        // Create the panel
+
         JPanel panel = new JPanel();
         JPanel navPanel = getNavPanel();
         panel.setLayout(new GridLayout(11, 2, 10, 10));
 
-        // Initialize components
         lblFirstName = new JLabel("First Name:");
         lblLastName = new JLabel("Last Name:");
         lblMiddleName = new JLabel("Middle Name:");
@@ -68,29 +65,17 @@ public class EmployeeEntry extends Standard{
         btnClear = new JButton("Clear");
         btnExit = new JButton("Exit");
 
-        // Add components to the panel
-        panel.add(lblFirstName);
-        panel.add(firstNameField);
-        panel.add(lblMiddleName);
-        panel.add(middleNameField);
-        panel.add(lblLastName);
-        panel.add(lastNameField);
-        panel.add(lblYearOfBirth);
-        panel.add(yearOfBirthField);
-        panel.add(lblNationalId);
-        panel.add(nationalIdField);
-        panel.add(lblEmail);
-        panel.add(emailField);
-        panel.add(lblAddress);
-        panel.add(addressField);
-        panel.add(lblKraPin);
-        panel.add(kraPinField);
-        panel.add(lblDepartmentDivision);
-        panel.add(departmentDivisionField);
-        panel.add(lblDisabilities);
-        panel.add(disabilitiesCombo);
-        panel.add(lblStatus);
-        panel.add(statusCombo);
+        panel.add(lblFirstName); panel.add(firstNameField);
+        panel.add(lblMiddleName); panel.add(middleNameField);
+        panel.add(lblLastName); panel.add(lastNameField);
+        panel.add(lblYearOfBirth); panel.add(yearOfBirthField);
+        panel.add(lblNationalId); panel.add(nationalIdField);
+        panel.add(lblEmail); panel.add(emailField);
+        panel.add(lblAddress); panel.add(addressField);
+        panel.add(lblKraPin); panel.add(kraPinField);
+        panel.add(lblDepartmentDivision); panel.add(departmentDivisionField);
+        panel.add(lblDisabilities); panel.add(disabilitiesCombo);
+        panel.add(lblStatus); panel.add(statusCombo);
 
         navPanel.add(btnSave);
         navPanel.add(btnClear);
@@ -100,8 +85,6 @@ public class EmployeeEntry extends Standard{
         add(getUpperPanel(),BorderLayout.NORTH);
         add(panel, BorderLayout.CENTER);
         add(navPanel,BorderLayout.SOUTH);
-        add(getLeftPanel(),BorderLayout.WEST);
-        add(getRightPanel(),BorderLayout.EAST);
 
         // Add action listener for the Save button
         btnSave.addActionListener(new ActionListener() {
@@ -112,7 +95,6 @@ public class EmployeeEntry extends Standard{
             }
         });
 
-        // Add action listener for the Clear button
         btnClear.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -125,7 +107,6 @@ public class EmployeeEntry extends Standard{
                 dispose();
             }
         });
-
     }
 
     private void saveEmployee() {
@@ -146,15 +127,25 @@ public class EmployeeEntry extends Standard{
         if (fName.isEmpty() || mName.isEmpty() || lName.isEmpty() || yearBirth.isEmpty() || nationalId.isEmpty() || address.isEmpty() || kraPin.isEmpty() || departmentDivision.isEmpty() || disabilities.isEmpty() || emailAddress.isEmpty() || status.isEmpty()) {
             JOptionPane.showMessageDialog(null, "All fields must be filled!", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(null, "New Employee record saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
             // Saving info to the database
             try {
                 conn = DriverManager.getConnection(url, databaseUser, databasePassword);
-                stmt = conn.createStatement();
                 String sql = "INSERT INTO Employees (FirstName, MiddleName, LastName, YearOfBirth, NationalIDNo, EmailAddress, PhysicalAddress, KRAPIN, DepartmentDivision, Disabilities, Status) " +
-                        "VALUES ('" + fName + "', '" + mName + "', '" + lName + "', '" + formattedDate + "', '" + nationalId +
-                        "', '" +emailAddress+ "', '" +address + "', '" + kraPin + "', '" + departmentDivision + "', '" + disabilities + "','" + status + "'))";
-                stmt.executeUpdate(sql);
+                        "VALUES (?,?,?,?,?,?,?,?,?,?,?);";
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                pstmt.setString(1, fName);
+                pstmt.setString(2, mName);
+                pstmt.setString(3, lName);
+                pstmt.setString(4, formattedDate);
+                pstmt.setString(5, nationalId);
+                pstmt.setString(6, emailAddress);
+                pstmt.setString(7, address);
+                pstmt.setString(8, kraPin);
+                pstmt.setString(9, departmentDivision);
+                pstmt.setString(10, disabilities);
+                pstmt.setString(11, status);
+
+                pstmt.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Employee record saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
                 ex.printStackTrace();

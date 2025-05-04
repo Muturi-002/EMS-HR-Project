@@ -30,7 +30,6 @@ public class TempStaffEntry extends Standard implements ActionListener {
 
     public TempStaffEntry() {
         setTitle("Temporary Staff Registration");
-        setLayout(new BorderLayout(20,20));
         JPanel panel = new JPanel();
         JPanel navPanel = getNavPanel();
         panel.setLayout(new GridLayout(12, 2, 10, 10)); // Increased rows for disabilities
@@ -48,34 +47,23 @@ public class TempStaffEntry extends Standard implements ActionListener {
         kraPinField = new JTextField();
         departmentDivisionField = new JTextField();
 
-        panel.add(new JLabel("First Name:"));
-        panel.add(firstNameField);
-        panel.add(new JLabel("Middle Name:"));
-        panel.add(middleNameField);
-        panel.add(new JLabel("Last Name:"));
-        panel.add(lastNameField);
-        panel.add(new JLabel("Work Level (Intern/Attache):"));
+        panel.add(new JLabel("First Name:")); panel.add(firstNameField);
+        panel.add(new JLabel("Middle Name:")); panel.add(middleNameField);
+        panel.add(new JLabel("Last Name:")); panel.add(lastNameField);
+        panel.add(new JLabel("Work Level (Intern/Attache):")); panel.add(workLevelCombo);
         workLevelCombo.addActionListener(this);
-        panel.add(workLevelCombo);
         panel.add(new JLabel("Year of Birth (YYYY-MM-DD):")); // Updated format
         panel.add(yearOfBirthField);
-        panel.add(new JLabel("National ID No:"));
-        panel.add(nationalIdField);
-        panel.add(new JLabel("Email Address:"));;
-        panel.add(emailField);
-        panel.add(new JLabel("Physical Address:"));
-        addressField = new JTextField();
-        panel.add(addressField);
-        panel.add(new JLabel("Disabilities :"));
-        panel.add(disabilitiesCombo);
-        kraPinLabel = new JLabel("KRA PIN (Interns only):");
-        panel.add(kraPinLabel);
-        panel.add(kraPinField);
-        panel.add(new JLabel("Department-Division ID:"));
-        panel.add(departmentDivisionField);
+        panel.add(new JLabel("National ID No:")); panel.add(nationalIdField);
+        panel.add(new JLabel("Email Address:"));; panel.add(emailField);
+        panel.add(new JLabel("Physical Address:")); addressField = new JTextField();
+        panel.add(addressField); panel.add(new JLabel("Disabilities :"));
+        panel.add(disabilitiesCombo); kraPinLabel = new JLabel("KRA PIN (Interns only):");
+        panel.add(kraPinLabel); panel.add(kraPinField);
+        panel.add(new JLabel("Department-Division ID:")); panel.add(departmentDivisionField);
+
         saveButton = new JButton("Save Record");
-        saveButton.addActionListener(this);
-        navPanel.add(saveButton);
+        saveButton.addActionListener(this); navPanel.add(saveButton);
         navPanel.add(btnexit = new JButton("Exit"));
         btnexit.addActionListener(new ActionListener() {
             @Override
@@ -87,8 +75,6 @@ public class TempStaffEntry extends Standard implements ActionListener {
         updateKraPinVisibility();
         add(getUpperPanel(),BorderLayout.NORTH);
         add(panel,BorderLayout.CENTER);
-        add(getLeftPanel(),BorderLayout.WEST);
-        add(getRightPanel(),BorderLayout.EAST);
         add(navPanel,BorderLayout.SOUTH);
     }
 

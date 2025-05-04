@@ -1,5 +1,6 @@
 package org.example.Staff;
 
+import org.example.Home;
 import org.example.Standard;
 import org.example.DB.Database;
 import org.example.LoadEnv;
@@ -15,7 +16,7 @@ public class ViewTempStaff extends Standard {
     String databaseUser = LoadEnv.getDatabaseUser();
     String databasePassword = LoadEnv.getDatabasePassword();
     String databaseName = LoadEnv.getDatabaseName();
-    String url= "jdbc:mysql://"+ipAddress+":"+port;
+    String url= "jdbc:mysql://"+ipAddress+":"+port+"/"+databaseName;
 
     private JTable tempTable;
 
@@ -26,6 +27,10 @@ public class ViewTempStaff extends Standard {
 
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         tempTable = new JTable(model);
+        JPanel buttonPanel= getNavPanel();
+        JButton btnExit = new JButton("Back to Homepage");
+        JButton btnSingleRecord= new JButton("View Each Record");
+        btnSingleRecord.addActionListener(e -> new SingleViewTemp());
 
         int totalColumnWidth = 0;
         for (int i = 0; i < tempTable.getColumnCount(); i++) {
@@ -40,6 +45,14 @@ public class ViewTempStaff extends Standard {
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         getContentPane().add(scrollPane, BorderLayout.CENTER);
+        btnExit.addActionListener(e -> {
+            dispose();
+            new Home();
+        });
+        buttonPanel.add(btnExit);
+        buttonPanel.add(btnSingleRecord);
+        add(buttonPanel, BorderLayout.SOUTH);
+        add(getUpperPanel(),BorderLayout.NORTH);
 
         // Load data from the database
         loadDataFromDatabase(model);
@@ -52,7 +65,7 @@ public class ViewTempStaff extends Standard {
         try (
             Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM "+databaseName+".Temporary")) { // Assuming table name is "Temporary"
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Temporary")) {
 
             while (rs.next()) {
                 Object[] row = {

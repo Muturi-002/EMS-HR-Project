@@ -1,5 +1,6 @@
 package org.example.Staff;
 
+import org.example.Home;
 import org.example.LoadEnv;
 import org.example.Standard;
 import javax.swing.*;
@@ -9,15 +10,14 @@ import java.awt.*;
 import java.sql.*;
 
 public class ViewEmployees extends Standard {
-
     private JTable employeeTable;
-    private JButton tempStaffButton;
+    private JButton tempStaffButton,btnExit,btnSingleRecord;
     String ipAddress = LoadEnv.getIP();
     String port = LoadEnv.getPort();
     String databaseUser = LoadEnv.getDatabaseUser();
     String databasePassword = LoadEnv.getDatabasePassword();
     String databaseName = LoadEnv.getDatabaseName();
-    String url= "jdbc:mysql://"+ipAddress+":"+port;
+    String url= "jdbc:mysql://"+ipAddress+":"+port+"/"+databaseName;
 
     public ViewEmployees() {
         setTitle("View Employee Records");
@@ -45,13 +45,24 @@ public class ViewEmployees extends Standard {
 
         tempStaffButton = new JButton("Check Temporary Staff");
         tempStaffButton.addActionListener(e -> new ViewTempStaff());
+        btnSingleRecord= new JButton("View Each Record");
+        btnSingleRecord.addActionListener(e -> new SingleViewEmployees());
+        btnExit= new JButton("Back to Homepage");
+        btnExit.addActionListener(e -> {
+                dispose();
+                new Home();
+
+        });
 
         // Layout
-        JPanel buttonPanel = new JPanel();
+        JPanel buttonPanel = getNavPanel();
         buttonPanel.add(tempStaffButton);
+        buttonPanel.add(btnSingleRecord);
+        buttonPanel.add(btnExit);
 
         getContentPane().add(scrollPane, BorderLayout.CENTER);
-        getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+        add(buttonPanel, BorderLayout.SOUTH);
+        add(getUpperPanel(),BorderLayout.NORTH);
 
         // Load data from the database
         loadDataFromDatabase(model);
@@ -64,7 +75,7 @@ public class ViewEmployees extends Standard {
         try (
             Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM "+databaseName+".Employees")) { // Assuming table name is "Employees"
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Employees")) { // Assuming table name is "Employees"
 
             while (rs.next()) {
                 Object[] row = {
@@ -89,6 +100,7 @@ public class ViewEmployees extends Standard {
             JOptionPane.showMessageDialog(this, "Error loading data from database.", "Database Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new ViewEmployees());
