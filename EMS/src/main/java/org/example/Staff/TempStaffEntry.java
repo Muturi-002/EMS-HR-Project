@@ -72,22 +72,20 @@ public class TempStaffEntry extends Standard implements ActionListener {
             }
         });
 
-        updateKraPinVisibility();
         add(getUpperPanel(),BorderLayout.NORTH);
         add(panel,BorderLayout.CENTER);
         add(navPanel,BorderLayout.SOUTH);
     }
 
-    private void updateKraPinVisibility() {
-        boolean isIntern = workLevelCombo.getSelectedItem().equals("Intern");
-        kraPinLabel.setVisible(isIntern);
-        kraPinField.setVisible(isIntern);
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == workLevelCombo) {
-            updateKraPinVisibility();
+            if (workLevelCombo.getSelectedItem().equals("INTERN")) {
+                kraPinField.setEditable(true);
+            }else{
+                kraPinField.setEditable(false);
+            }
         } else if (e.getSource() == saveButton) {
             String firstName = firstNameField.getText().trim().toUpperCase();
             String middleName = middleNameField.getText().trim().toUpperCase();
@@ -142,7 +140,7 @@ public class TempStaffEntry extends Standard implements ActionListener {
                  pstmt.setString(7, emailAddress);
                  pstmt.setString(8, address);
                  pstmt.setString(9, disabilities); // Use value from combo box
-                 pstmt.setString(10, workLevel.equals("Intern") ? kraPin : null); // Handle KRAPIN for Attache
+                 pstmt.setString(10, kraPin);
                  pstmt.setInt(11, departmentDivision); // Store DepartmentDivision ID
 
                 pstmt.executeUpdate();

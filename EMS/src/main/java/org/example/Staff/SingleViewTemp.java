@@ -7,8 +7,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SingleViewTemp extends Standard{
     String ipAddress = LoadEnv.getIP();
@@ -20,16 +18,16 @@ public class SingleViewTemp extends Standard{
 
     JPanel centrePanel = new JPanel();
     JPanel navPanel = getNavPanel();
-    JButton btnBack,btnNext,btnPrevious,btnEnableEdit,btnDelete,btnNew,btnSave;
+    JButton btnBack,btnEnableEdit,btnDelete,btnNew,btnSave,btnSearch;
 
     private JTextField empIDField,firstNameField, middleNameField, lastNameField, nationalIdField, emailField,addressField, kraPinField, departmentDivisionField, yearOfBirthField;
     private JComboBox<String> workLevelCombo, disabilitiesCombo;
     SingleViewTemp(){
-        setTitle("View Each Employee Record");
+        setTitle("Search for Intern/Attache Record");
         setLayout(new BorderLayout(20,20));
         centrePanel.setLayout(new GridLayout(12, 2, 10, 10));
 
-        empIDField= new JTextField(); empIDField.setEditable(false);
+        empIDField= new JTextField(); empIDField.setEditable(true);
         firstNameField = new JTextField(); firstNameField.setEditable(false);
         middleNameField = new JTextField(); middleNameField.setEditable(false);
         lastNameField = new JTextField(); lastNameField.setEditable(false);
@@ -60,20 +58,17 @@ public class SingleViewTemp extends Standard{
 
         btnBack = new JButton("Back To Table View"); btnBack.addActionListener(new Nav());
         btnDelete= new JButton("Delete Record"); btnDelete.addActionListener(new Nav());
-        btnNext= new JButton("Next Record"); btnNext.addActionListener(new Nav());
-        btnPrevious= new JButton("Previous Record"); btnPrevious.addActionListener(new Nav());
         btnEnableEdit= new JButton("Enable Edit"); btnEnableEdit.addActionListener(new Nav());
         btnNew= new JButton("New Record"); btnNew.addActionListener(new Nav());
         btnSave = new JButton("Save Changes"); btnSave.addActionListener(new Nav());
+        btnSearch= new JButton("Search Record");btnSearch.addActionListener(new Nav());
 
+        navPanel.add(btnSearch);
         navPanel.add(btnEnableEdit);
         navPanel.add(btnNew);
-        navPanel.add(btnNext);
-        navPanel.add(btnPrevious);
         navPanel.add(btnBack);
         navPanel.add(btnDelete);
 
-        getRecords();//go to method for retrieving individual records
         add(getUpperPanel(),BorderLayout.NORTH);
         add(centrePanel, BorderLayout.CENTER);
         add(navPanel,BorderLayout.SOUTH);
@@ -85,15 +80,13 @@ public class SingleViewTemp extends Standard{
             if (e.getSource() == btnBack) {
                 dispose();
                 new ViewTempStaff();
-            } else if (e.getSource() == btnNext) {
-                nextRecord();
-            } else if (e.getSource() == btnPrevious) {
-                previousRecord();
-            } else if (e.getSource() == btnEnableEdit) {
+            } else if (e.getSource()==btnSearch){
+                getRecords();
+            }else if (e.getSource() == btnEnableEdit) {
                 editEnabled();
             } else if (e.getSource() == btnNew) {
                 dispose();
-                new EmployeeEntry();
+                new TempStaffEntry();
             } else if (e.getSource() == btnDelete) {
                 try (Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
                      PreparedStatement pstmt = conn.prepareStatement("DELETE FROM Temporary WHERE EmployeeID=?")) {
@@ -143,6 +136,7 @@ public class SingleViewTemp extends Standard{
     }
 
     private void editEnabled(){
+        empIDField.setEditable(false);
         firstNameField.setEditable(true);
         middleNameField.setEditable(true);
         lastNameField.setEditable(true);
@@ -156,21 +150,14 @@ public class SingleViewTemp extends Standard{
         departmentDivisionField.setEditable(true);
         disabilitiesCombo.setEnabled(true);
     }
-    private void nextRecord() {
-        // Code to fetch and display the next record from the database
-    }
-    private void previousRecord() {
-        // Code to fetch and display the previous record from the database
-    }
 
     private void getRecords() {
         try (
                 Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * FROM Temporary")
         ) {
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Temporary WHERE TempID = '" + empIDField.getText()+"';");
             if (rs.next()) {
-                empIDField.setText(rs.getString("TempID"));
                 firstNameField.setText(rs.getString("FirstName"));
                 middleNameField.setText(rs.getString("MiddleName"));
                 lastNameField.setText(rs.getString("LastName"));
@@ -193,8 +180,6 @@ public class SingleViewTemp extends Standard{
             JOptionPane.showMessageDialog(this, "Failed to load employee data", "Database Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    public void displayRecords(){
 
-    }
 
 }

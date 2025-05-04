@@ -5,13 +5,14 @@ import org.example.LoadEnv;
 import org.example.Standard;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.View;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.*;
 
 public class ViewEmployees extends Standard {
     private JTable employeeTable;
-    private JButton tempStaffButton,btnExit,btnSingleRecord;
+    private JButton tempStaffButton,btnExit,btnSingleRecord,btnNew;
     String ipAddress = LoadEnv.getIP();
     String port = LoadEnv.getPort();
     String databaseUser = LoadEnv.getDatabaseUser();
@@ -51,7 +52,13 @@ public class ViewEmployees extends Standard {
         btnExit.addActionListener(e -> {
                 dispose();
                 new Home();
-
+        });
+        btnNew= new JButton("Add New Record");navPanel.add(btnNew);
+        btnNew.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new EmployeeEntry();
+            }
         });
 
         // Layout

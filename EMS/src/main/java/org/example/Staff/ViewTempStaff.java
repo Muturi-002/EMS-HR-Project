@@ -2,11 +2,12 @@ package org.example.Staff;
 
 import org.example.Home;
 import org.example.Standard;
-import org.example.DB.Database;
 import org.example.LoadEnv;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.*;
 
 
@@ -30,6 +31,7 @@ public class ViewTempStaff extends Standard {
         JPanel buttonPanel= getNavPanel();
         JButton btnExit = new JButton("Back to Homepage");
         JButton btnSingleRecord= new JButton("View Each Record");
+        JButton btnNew;
         btnSingleRecord.addActionListener(e -> new SingleViewTemp());
 
         int totalColumnWidth = 0;
@@ -48,6 +50,13 @@ public class ViewTempStaff extends Standard {
         btnExit.addActionListener(e -> {
             dispose();
             new Home();
+        });
+        btnNew= new JButton("Add new Intern/Attache");navPanel.add(btnNew);
+        btnNew.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new TempStaffEntry();
+            }
         });
         buttonPanel.add(btnExit);
         buttonPanel.add(btnSingleRecord);

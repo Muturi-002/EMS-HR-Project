@@ -17,7 +17,7 @@ public class SingleViewEmployees extends Standard {
 
     JPanel centrePanel = new JPanel();
     JPanel navPanel = getNavPanel();
-    JButton btnBack,btnNext,btnPrevious,btnEnableEdit,btnDelete,btnNew,btnSave;
+    JButton btnBack,btnEnableEdit,btnDelete,btnNew,btnSave,btnSearch;
 
     private JComboBox<String> disabilitiesCombo, statusCombo;
     private JLabel lblEmpID,lblFirstName, lblMiddleName, lblLastName, lblNationalId, lblEmail,lblAddress, lblKraPin, lblDepartmentDivision, lblYearOfBirth, lblDisabilities, lblStatus;
@@ -40,7 +40,7 @@ public class SingleViewEmployees extends Standard {
         lblDisabilities = new JLabel("Disabilities (if any):");
         lblStatus= new JLabel("Employment Status");
 
-        empIDField= new JTextField(); empIDField.setEditable(false);
+        empIDField= new JTextField(); empIDField.setEditable(true);
         firstNameField= new JTextField(); firstNameField.setEditable(false);
         lastNameField = new JTextField(); lastNameField.setEditable(false);
         middleNameField = new JTextField(); middleNameField.setEditable(false);
@@ -70,20 +70,16 @@ public class SingleViewEmployees extends Standard {
 
         btnBack = new JButton("Back To Table View"); btnBack.addActionListener(new Nav());
         btnDelete= new JButton("Delete Record"); btnDelete.addActionListener(new Nav());
-        btnNext= new JButton("Next Record"); btnNext.addActionListener(new Nav());
-        btnPrevious= new JButton("Previous Record"); btnPrevious.addActionListener(new Nav());
         btnEnableEdit= new JButton("Enable Edit"); btnEnableEdit.addActionListener(new Nav());
         btnNew= new JButton("New Record"); btnNew.addActionListener(new Nav());
         btnSave = new JButton("Save Changes"); btnSave.addActionListener(new Nav());
+        btnSearch= new JButton("Search Record"); btnSearch.addActionListener(new Nav());
 
         navPanel.add(btnEnableEdit);
         navPanel.add(btnNew);
-        navPanel.add(btnNext);
-        navPanel.add(btnPrevious);
         navPanel.add(btnBack);
         navPanel.add(btnDelete);
-
-        getRecords();//go to method for retrieving individual records
+        navPanel.add(btnSearch);
         add(getUpperPanel(),BorderLayout.NORTH);
         add(centrePanel, BorderLayout.CENTER);
         add(navPanel,BorderLayout.SOUTH);
@@ -95,11 +91,9 @@ public class SingleViewEmployees extends Standard {
             if (e.getSource() == btnBack) {
                 dispose();
                 new ViewEmployees();
-            } else if (e.getSource() == btnNext) {
-                nextRecord();
-            } else if (e.getSource() == btnPrevious) {
-                previousRecord();
-            } else if (e.getSource() == btnEnableEdit) {
+            } else if (e.getSource()==btnSearch){
+                getRecords();
+            }else if (e.getSource() == btnEnableEdit) {
                 editEnabled();
             } else if (e.getSource() == btnNew) {
                 dispose();
@@ -153,6 +147,7 @@ public class SingleViewEmployees extends Standard {
     }
 
     private void editEnabled(){
+        empIDField.setEditable(false);
         firstNameField.setEditable(true);
         middleNameField.setEditable(true);
         lastNameField.setEditable(true);
@@ -165,21 +160,15 @@ public class SingleViewEmployees extends Standard {
         disabilitiesCombo.setEnabled(true);
         statusCombo.setEnabled(true);
     }
-    private void nextRecord() {
-        // Code to fetch and display the next record from the database
-    }
-    private void previousRecord() {
-        // Code to fetch and display the previous record from the database
-    }
 
     private void getRecords() {
         try (
                 Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * FROM Employees")
         ) {
+            String id=empIDField.getText();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Employees WHERE EmployeeID = '" + id+"';");
             if (rs.next()) {
-                empIDField.setText(rs.getString("EmployeeID"));
                 firstNameField.setText(rs.getString("FirstName"));
                 middleNameField.setText(rs.getString("MiddleName"));
                 lastNameField.setText(rs.getString("LastName"));

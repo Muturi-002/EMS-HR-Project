@@ -147,6 +147,7 @@ public class EmployeeEntry extends Standard{
 
                 pstmt.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Employee record saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                clearFields();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
