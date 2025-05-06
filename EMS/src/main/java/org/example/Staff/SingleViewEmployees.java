@@ -8,12 +8,10 @@ import java.awt.event.*;
 import java.sql.*;
 
 public class SingleViewEmployees extends Standard {
-    String ipAddress = LoadEnv.getIP();
-    String port = LoadEnv.getPort();
     String databaseUser = LoadEnv.getDatabaseUser();
     String databasePassword = LoadEnv.getDatabasePassword();
     String databaseName = LoadEnv.getDatabaseName();
-    String url= "jdbc:mysql://"+ipAddress+":"+port+"/"+databaseName;
+    String url= LoadEnv.getURL();
 
     JPanel centrePanel = new JPanel();
     JPanel navPanel = getNavPanel();
@@ -117,31 +115,31 @@ public class SingleViewEmployees extends Standard {
                 //Saving changes
                 try (Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
                      PreparedStatement pstmt = conn.prepareStatement("UPDATE " + databaseName + ".Employees SET FirstName=?, MiddleName=?, LastName=?, YearOfBirth=?, NationalIDNo=?, EmailAddress=?, PhysicalAddress=?, KRAPIN=?, DepartmentDivision=?, Disabilities=?, Status=? WHERE EmployeeID=?"))
-                    {
-                        pstmt.setString(1, firstNameField.getText());
-                        pstmt.setString(2, middleNameField.getText());
-                        pstmt.setString(3, lastNameField.getText());
-                        pstmt.setDate(4, Date.valueOf(yearOfBirthField.getText()));
-                        pstmt.setString(5, nationalIdField.getText());
-                        pstmt.setString(6, emailField.getText());
-                        pstmt.setString(7, addressField.getText());
-                        pstmt.setString(8, kraPinField.getText());
-                        pstmt.setInt(9, Integer.parseInt(departmentDivisionField.getText()));
-                        pstmt.setString(10, disabilitiesCombo.getSelectedItem().toString());
-                        pstmt.setString(11, statusCombo.getSelectedItem().toString());
-                        pstmt.setInt(12, Integer.parseInt(empIDField.getText()));
+                {
+                    pstmt.setString(1, firstNameField.getText());
+                    pstmt.setString(2, middleNameField.getText());
+                    pstmt.setString(3, lastNameField.getText());
+                    pstmt.setDate(4, Date.valueOf(yearOfBirthField.getText()));
+                    pstmt.setString(5, nationalIdField.getText());
+                    pstmt.setString(6, emailField.getText());
+                    pstmt.setString(7, addressField.getText());
+                    pstmt.setString(8, kraPinField.getText());
+                    pstmt.setInt(9, Integer.parseInt(departmentDivisionField.getText()));
+                    pstmt.setString(10, disabilitiesCombo.getSelectedItem().toString());
+                    pstmt.setString(11, statusCombo.getSelectedItem().toString());
+                    pstmt.setInt(12, Integer.parseInt(empIDField.getText()));
 
-                        int rowsUpdated = pstmt.executeUpdate();
-                        if (rowsUpdated > 0) {
-                            JOptionPane.showMessageDialog(SingleViewEmployees.this, "Record updated successfully.");
-                            dispose();
-                            new ViewEmployees();
-                        } else {
-                            JOptionPane.showMessageDialog(SingleViewEmployees.this, "Failed to update record.");
-                        }
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
+                    int rowsUpdated = pstmt.executeUpdate();
+                    if (rowsUpdated > 0) {
+                        JOptionPane.showMessageDialog(SingleViewEmployees.this, "Record updated successfully.");
+                        dispose();
+                        new ViewEmployees();
+                    } else {
+                        JOptionPane.showMessageDialog(SingleViewEmployees.this, "Failed to update record.");
                     }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
         }
     }

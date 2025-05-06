@@ -21,12 +21,10 @@ public class EmployeeEntry extends Standard{
     //Database connection
     static Connection conn ;
     Statement stmt;
-    String ipAddress = LoadEnv.getIP();
-    String port = LoadEnv.getPort();
     String databaseUser = LoadEnv.getDatabaseUser();
     String databasePassword = LoadEnv.getDatabasePassword();
     String databaseName = LoadEnv.getDatabaseName();
-    String url= "jdbc:mysql://"+ipAddress+":"+port+"/"+databaseName;
+    String url= LoadEnv.getURL();
 
     public EmployeeEntry() {
         setTitle("Add a New/Existing Employee");

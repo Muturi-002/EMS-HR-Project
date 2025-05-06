@@ -13,12 +13,10 @@ import java.sql.*;
 public class ViewEmployees extends Standard {
     private JTable employeeTable;
     private JButton tempStaffButton,btnExit,btnSingleRecord,btnNew;
-    String ipAddress = LoadEnv.getIP();
-    String port = LoadEnv.getPort();
     String databaseUser = LoadEnv.getDatabaseUser();
     String databasePassword = LoadEnv.getDatabasePassword();
     String databaseName = LoadEnv.getDatabaseName();
-    String url= "jdbc:mysql://"+ipAddress+":"+port+"/"+databaseName;
+    String url= LoadEnv.getURL();
 
     public ViewEmployees() {
         setTitle("View Employee Records");
@@ -50,8 +48,8 @@ public class ViewEmployees extends Standard {
         btnSingleRecord.addActionListener(e -> new SingleViewEmployees());
         btnExit= new JButton("Back to Homepage");
         btnExit.addActionListener(e -> {
-                dispose();
-                new Home();
+            dispose();
+            new Home();
         });
         btnNew= new JButton("Add New Record");navPanel.add(btnNew);
         btnNew.addActionListener(new ActionListener() {
@@ -80,9 +78,9 @@ public class ViewEmployees extends Standard {
     private void loadDataFromDatabase(DefaultTableModel model) {
 
         try (
-            Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Employees")) { // Assuming table name is "Employees"
+                Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT * FROM Employees")) { // Assuming table name is "Employees"
 
             while (rs.next()) {
                 Object[] row = {

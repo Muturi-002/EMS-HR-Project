@@ -9,12 +9,10 @@ import java.awt.event.ActionListener;
 import java.sql.*;
 
 public class SingleViewTemp extends Standard{
-    String ipAddress = LoadEnv.getIP();
-    String port = LoadEnv.getPort();
     String databaseUser = LoadEnv.getDatabaseUser();
     String databasePassword = LoadEnv.getDatabasePassword();
     String databaseName = LoadEnv.getDatabaseName();
-    String url= "jdbc:mysql://"+ipAddress+":"+port+"/"+databaseName;
+    String url= LoadEnv.getURL();
 
     JPanel centrePanel = new JPanel();
     JPanel navPanel = getNavPanel();

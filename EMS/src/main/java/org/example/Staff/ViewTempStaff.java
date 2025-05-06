@@ -12,12 +12,10 @@ import java.sql.*;
 
 
 public class ViewTempStaff extends Standard {
-    String ipAddress = LoadEnv.getIP();
-    String port = LoadEnv.getPort();
     String databaseUser = LoadEnv.getDatabaseUser();
     String databasePassword = LoadEnv.getDatabasePassword();
     String databaseName = LoadEnv.getDatabaseName();
-    String url= "jdbc:mysql://"+ipAddress+":"+port+"/"+databaseName;
+    String url= LoadEnv.getURL();
 
     private JTable tempTable;
 
@@ -72,9 +70,9 @@ public class ViewTempStaff extends Standard {
     private void loadDataFromDatabase(DefaultTableModel model) {
         // Database connection details
         try (
-            Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Temporary")) {
+                Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT * FROM Temporary")) {
 
             while (rs.next()) {
                 Object[] row = {

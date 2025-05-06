@@ -24,12 +24,9 @@ public class LoadEnv {
         }
     }
 
-    public static String getFilePath(){
-        return properties.getProperty("file_path");
-    }
 
-    public static String getIP() {
-        return properties.getProperty("IP_Address");
+    public static String getURL() {
+        return properties.getProperty("db_url");
     }
 
     public static String getPort() {

@@ -21,12 +21,10 @@ public class TempStaffEntry extends Standard implements ActionListener {
     // Database credentials (replace with your actual credentials)
     static Connection conn ;
     Statement stmt;
-    String ipAddress = LoadEnv.getIP();
-    String port = LoadEnv.getPort();
     String databaseUser = LoadEnv.getDatabaseUser();
     String databasePassword = LoadEnv.getDatabasePassword();
     String databaseName = LoadEnv.getDatabaseName();
-    String url= "jdbc:mysql://"+ipAddress+":"+port+"/"+databaseName;
+    String url= LoadEnv.getURL();
 
     public TempStaffEntry() {
         setTitle("Temporary Staff Registration");
@@ -108,7 +106,7 @@ public class TempStaffEntry extends Standard implements ActionListener {
 
             LocalDate yearOfBirth;
             try {
-                 yearOfBirth = LocalDate.parse(yearOfBirthText, DateTimeFormatter.ISO_DATE); // Use LocalDate
+                yearOfBirth = LocalDate.parse(yearOfBirthText, DateTimeFormatter.ISO_DATE); // Use LocalDate
             } catch (DateTimeParseException ex) {
                 JOptionPane.showMessageDialog(this, "Invalid Year of Birth. Please enter a valid date in YYYY-MM-DD format.", "Validation Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -123,25 +121,25 @@ public class TempStaffEntry extends Standard implements ActionListener {
             try {
                 departmentDivision = Integer.parseInt(departmentDivisionText);
             } catch (NumberFormatException ex) {
-                 JOptionPane.showMessageDialog(this, "Invalid Department-Division ID. Please enter a valid integer.", "Validation Error", JOptionPane.ERROR_MESSAGE);
-                 return;
+                JOptionPane.showMessageDialog(this, "Invalid Department-Division ID. Please enter a valid integer.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
 
             // Save the record to the database
             try (Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword)) {
-                 String sql = "INSERT INTO Temporary (FirstName, MiddleName, LastName, WorkLevel, YearOfBirth, NationalIDNo, EmailAddress,PhysicalAddress, Disabilities, KRAPIN, DepartmentDivision) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; // Updated Table name
-                 PreparedStatement pstmt = conn.prepareStatement(sql);
-                 pstmt.setString(1, firstName);
-                 pstmt.setString(2, middleName);
-                 pstmt.setString(3, lastName);
-                 pstmt.setString(4, workLevel);
-                 pstmt.setObject(5, formattedDate); // Store as LocalDate
-                 pstmt.setString(6, nationalId);
-                 pstmt.setString(7, emailAddress);
-                 pstmt.setString(8, address);
-                 pstmt.setString(9, disabilities); // Use value from combo box
-                 pstmt.setString(10, kraPin);
-                 pstmt.setInt(11, departmentDivision); // Store DepartmentDivision ID
+                String sql = "INSERT INTO Temporary (FirstName, MiddleName, LastName, WorkLevel, YearOfBirth, NationalIDNo, EmailAddress,PhysicalAddress, Disabilities, KRAPIN, DepartmentDivision) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; // Updated Table name
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                pstmt.setString(1, firstName);
+                pstmt.setString(2, middleName);
+                pstmt.setString(3, lastName);
+                pstmt.setString(4, workLevel);
+                pstmt.setObject(5, formattedDate); // Store as LocalDate
+                pstmt.setString(6, nationalId);
+                pstmt.setString(7, emailAddress);
+                pstmt.setString(8, address);
+                pstmt.setString(9, disabilities); // Use value from combo box
+                pstmt.setString(10, kraPin);
+                pstmt.setInt(11, departmentDivision); // Store DepartmentDivision ID
 
                 pstmt.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Temporary Staff Record Saved Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);

@@ -6,35 +6,50 @@ import org.example.LoadEnv;
 public class Database {
     static Connection conn ;
     Statement stmt;
-    String ipAddress = LoadEnv.getIP();
-    String port = LoadEnv.getPort();
     String databaseUser = LoadEnv.getDatabaseUser();
     String databasePassword = LoadEnv.getDatabasePassword();
     String databaseName = LoadEnv.getDatabaseName();
-    String url= "jdbc:mysql://"+ipAddress+":"+port+"/";
+    String url= LoadEnv.getURL();
     public Database() {
         try {
-            createDatabase();
+            //createDatabase();
+            checkConnection();
             createTables();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    private void createDatabase(){
+    // to connect to Oracle Autonomous Database
+    private void checkConnection(){
         try {
+            // Set the TNS_ADMIN property to the wallet path
+            System.setProperty("oracle.net.tns_admin", "./Wallet_EMS2");
+
+            // Use the database URL from the wallet configuration
             conn = DriverManager.getConnection(url, databaseUser, databasePassword);
             stmt = conn.createStatement();
-            String dropDB = "DROP DATABASE IF EXISTS " + databaseName;
-            stmt.executeUpdate(dropDB);
-            String createDB = "CREATE DATABASE " + databaseName;
-            stmt.executeUpdate(createDB);
-            System.out.println("Database "+databaseName+" created successfully. Now using it.");
-            stmt.executeUpdate("USE EMS");
-            conn= DriverManager.getConnection(url+databaseName, databaseUser, databasePassword);
-        }catch (Exception e){
+            System.out.println("Connected to the Oracle Autonomous Database 19c successfully.");
+        } catch (SQLException e) {
+            System.out.println("Failed to connect to the Oracle Autonomous Database 19c.");
             e.printStackTrace();
         }
     }
+    //Used for connecting to a locally-hosted or remote MySQL database
+//    private void createDatabase(){
+//        try {
+//            conn = DriverManager.getConnection(url, databaseUser, databasePassword);
+//            stmt = conn.createStatement();
+//            String dropDB = "DROP DATABASE IF EXISTS " + databaseName;
+//            stmt.executeUpdate(dropDB);
+//            String createDB = "CREATE DATABASE " + databaseName;
+//            stmt.executeUpdate(createDB);
+//            System.out.println("Database "+databaseName+" created successfully. Now using it.");
+//            stmt.executeUpdate("USE EMS");
+//            conn= DriverManager.getConnection(url+databaseName, databaseUser, databasePassword);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//    }
     private void createTables(){
         try {
             stmt.execute("SET FOREIGN_KEY_CHECKS = 0");
