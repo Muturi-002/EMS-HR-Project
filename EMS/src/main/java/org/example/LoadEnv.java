@@ -28,11 +28,9 @@ public class LoadEnv {
     public static String getURL() {
         return properties.getProperty("db_url");
     }
-
-    public static String getPort() {
-        return properties.getProperty("Port");
+    public static String getTNSADMIN(){
+        return properties.getProperty("TNS_ADMIN");
     }
-
     public static String getDatabaseUser() {
         return properties.getProperty("database_user");
     }
