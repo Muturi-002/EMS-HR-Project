@@ -19,6 +19,7 @@ public class Auth extends Standard implements ActionListener{
     JPanel userPanel = new JPanel();
     JPanel passPanel = new JPanel();
     JButton confirm = new JButton("Confirm");
+    JButton exit= new JButton("Exit");
     JTextField username = new JTextField(20);
     JPasswordField password = new JPasswordField(20);
 
@@ -30,12 +31,6 @@ public class Auth extends Standard implements ActionListener{
         auth.setOpaque(true);
         auth.setBackground(Color.lightGray);
         auth.setFont(new Font("Arial", Font.BOLD, 30));
-        user.setOpaque(true);
-        user.setHorizontalAlignment(JLabel.LEFT);
-        user.setBackground(Color.lightGray);
-        pass.setOpaque(true);
-        pass.setHorizontalAlignment(JLabel.LEFT);
-        pass.setBackground(Color.lightGray);
 
         authPanel.setBackground(Color.GRAY);
         authPanel.setPreferredSize(new Dimension(500, 400));
@@ -51,6 +46,13 @@ public class Auth extends Standard implements ActionListener{
         passPanel.add(password);
 
         confirm.addActionListener(this);
+        exit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+        bottomPanel.add(exit);
         this.add(auth, BorderLayout.NORTH);
         this.add(authPanel, BorderLayout.CENTER);
         this.add(leftPanel, BorderLayout.WEST);

@@ -5,7 +5,7 @@ import java.awt.event.*;
 import org.example.Staff.*;
 
 public class Home extends JFrame{
-    JButton btnview, btncreate, btnexit,btnemployee,btntemp,btntempstaff;
+    JButton btnview, btnLeaves, btnexit,btnemployee,btntemp,btntempstaff,btnAttendance;
     JLabel homeLabel= new JLabel("Welcome, "+LoadEnv.getAppUsername());
     JPanel nav=new JPanel();
     JPanel buttonPanel=new JPanel();
@@ -22,21 +22,23 @@ public class Home extends JFrame{
        homeLabel.setHorizontalAlignment(SwingConstants.CENTER);
        homeLabel.setFont(new Font("Arial", Font.BOLD,20));
 
-       btncreate= new JButton("Create Record");//Refactor it.
+       btnLeaves= new JButton("Check Leave Requests");
        btnview= new JButton("View Employees' Details (Contract)");
        btnexit= new JButton("Exit");
        btnemployee = new JButton("Add Employee");
        btntemp= new JButton("Add Temporary stuff");
        btntempstaff= new JButton("View Temporary Staff Details");
+       btnAttendance= new JButton("Attendance");
 
        //nav.setLayout(new GridLayout(2,2,20,50));
        nav.setLayout(new FlowLayout());
-       buttonPanel.setLayout(new GridLayout(5,1,20,50));
-       buttonPanel.add(btncreate);
+       buttonPanel.setLayout(new GridLayout(6,1,20,50));
        buttonPanel.add(btnview);
        buttonPanel.add(btnemployee);
        buttonPanel.add(btntemp);
        buttonPanel.add(btntempstaff);
+       buttonPanel.add(btnLeaves);
+       buttonPanel.add(btnAttendance);
        //nav.add(btnexit);
        nav.add(buttonPanel);
 
