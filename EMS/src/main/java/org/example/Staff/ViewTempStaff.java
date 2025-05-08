@@ -14,14 +14,15 @@ import java.sql.*;
 public class ViewTempStaff extends Standard {
     String databaseUser = LoadEnv.getDatabaseUser();
     String databasePassword = LoadEnv.getDatabasePassword();
-    String databaseName = LoadEnv.getDatabaseName();
-    String url= LoadEnv.getURL();
+    String url = LoadEnv.getURL();
+    String tnsAdmin = "/home/muturiiii/Desktop/Y3S2 Project/EMS-HR-Project/EMS/src/main/java/org/example/Wallet_EMS2";
 
     private JTable tempTable;
 
     public ViewTempStaff() {
+        System.setProperty("oracle.net.tns_admin", tnsAdmin);
         setTitle("View Temporary Staff's Records");
-        // Table Columns
+
         String[] columnNames = {"ID", "First Name", "Middle Name", "Last Name", "Work Level", "Year of Birth", "National ID", "Address", "Disabilities", "KRA PIN", "Department Division"};
 
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);

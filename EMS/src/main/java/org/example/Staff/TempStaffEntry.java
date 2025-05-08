@@ -23,10 +23,12 @@ public class TempStaffEntry extends Standard implements ActionListener {
     Statement stmt;
     String databaseUser = LoadEnv.getDatabaseUser();
     String databasePassword = LoadEnv.getDatabasePassword();
-    String databaseName = LoadEnv.getDatabaseName();
-    String url= LoadEnv.getURL();
+    String url = LoadEnv.getURL();
+    String tnsAdmin = "/home/muturiiii/Desktop/Y3S2 Project/EMS-HR-Project/EMS/src/main/java/org/example/Wallet_EMS2";
 
     public TempStaffEntry() {
+        System.setProperty("oracle.net.tns_admin", tnsAdmin);
+
         setTitle("Temporary Staff Registration");
         JPanel panel = new JPanel();
         JPanel navPanel = getNavPanel();
@@ -35,7 +37,7 @@ public class TempStaffEntry extends Standard implements ActionListener {
         firstNameField = new JTextField();
         middleNameField = new JTextField();
         lastNameField = new JTextField();
-        String[] workLevels = {"INTERN", "ATTACHE"};
+        String[] workLevels = {"Intern", "Attache"};
         workLevelCombo = new JComboBox<>(workLevels);
         yearOfBirthField = new JTextField();
         nationalIdField = new JTextField();
@@ -50,7 +52,7 @@ public class TempStaffEntry extends Standard implements ActionListener {
         panel.add(new JLabel("Last Name:")); panel.add(lastNameField);
         panel.add(new JLabel("Work Level (Intern/Attache):")); panel.add(workLevelCombo);
         workLevelCombo.addActionListener(this);
-        panel.add(new JLabel("Year of Birth (YYYY-MM-DD):")); // Updated format
+        panel.add(new JLabel("Year of Birth (DD-MMM-YY):")); // Updated format
         panel.add(yearOfBirthField);
         panel.add(new JLabel("National ID No:")); panel.add(nationalIdField);
         panel.add(new JLabel("Email Address:"));; panel.add(emailField);
@@ -90,7 +92,7 @@ public class TempStaffEntry extends Standard implements ActionListener {
             String lastName = lastNameField.getText().trim().toUpperCase();
             String workLevel = (String) workLevelCombo.getSelectedItem();
             String yearOfBirthText = yearOfBirthField.getText().trim();
-            String formattedDate = LocalDate.parse(yearOfBirthText, formatter).toString();
+            LocalDate formattedDate = LocalDate.parse(yearOfBirthText, formatter);
             String nationalId = nationalIdField.getText().trim();
             String emailAddress= emailField.getText().trim().toLowerCase();
             String address = addressField.getText().trim().toUpperCase();
@@ -99,7 +101,7 @@ public class TempStaffEntry extends Standard implements ActionListener {
             String departmentDivisionText = departmentDivisionField.getText().trim();
 
             // Basic Validation
-            if (firstName.isEmpty() || lastName.isEmpty() || formattedDate.isEmpty() || nationalId.isEmpty() || departmentDivisionText.isEmpty() || emailAddress.isEmpty()) {
+            if (firstName.isEmpty() || lastName.isEmpty() || yearOfBirthText.isEmpty() || nationalId.isEmpty() || departmentDivisionText.isEmpty() || emailAddress.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Please fill in all required fields (First Name, Last Name, Year of Birth, National ID, Email Address, Department-Division).", "Validation Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }

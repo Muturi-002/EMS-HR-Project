@@ -15,10 +15,12 @@ public class ViewEmployees extends Standard {
     private JButton tempStaffButton,btnExit,btnSingleRecord,btnNew;
     String databaseUser = LoadEnv.getDatabaseUser();
     String databasePassword = LoadEnv.getDatabasePassword();
-    String databaseName = LoadEnv.getDatabaseName();
-    String url= LoadEnv.getURL();
+    String url = LoadEnv.getURL();
+    String tnsAdmin = "/home/muturiiii/Desktop/Y3S2 Project/EMS-HR-Project/EMS/src/main/java/org/example/Wallet_EMS2";
 
     public ViewEmployees() {
+        System.setProperty("oracle.net.tns_admin", tnsAdmin);
+
         setTitle("View Employee Records");
 
         // Table Column Names - replace/add as per your Employees table

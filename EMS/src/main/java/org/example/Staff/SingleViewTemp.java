@@ -11,21 +11,22 @@ import java.sql.*;
 public class SingleViewTemp extends Standard{
     String databaseUser = LoadEnv.getDatabaseUser();
     String databasePassword = LoadEnv.getDatabasePassword();
-    String databaseName = LoadEnv.getDatabaseName();
-    String url= LoadEnv.getURL();
+    String url = LoadEnv.getURL();
+    String tnsAdmin = "/home/muturiiii/Desktop/Y3S2 Project/EMS-HR-Project/EMS/src/main/java/org/example/Wallet_EMS2";
 
     JPanel centrePanel = new JPanel();
     JPanel navPanel = getNavPanel();
     JButton btnBack,btnEnableEdit,btnDelete,btnNew,btnSave,btnSearch;
 
-    private JTextField empIDField,firstNameField, middleNameField, lastNameField, nationalIdField, emailField,addressField, kraPinField, departmentDivisionField, yearOfBirthField;
+    private JTextField tempIDField,firstNameField, middleNameField, lastNameField, nationalIdField, emailField,addressField, kraPinField, departmentDivisionField, yearOfBirthField;
     private JComboBox<String> workLevelCombo, disabilitiesCombo;
     SingleViewTemp(){
+        System.setProperty("oracle.net.tns_admin", tnsAdmin);
         setTitle("Search for Intern/Attache Record");
         setLayout(new BorderLayout(20,20));
         centrePanel.setLayout(new GridLayout(12, 2, 10, 10));
 
-        empIDField= new JTextField(); empIDField.setEditable(true);
+        tempIDField= new JTextField(); tempIDField.setEditable(true);
         firstNameField = new JTextField(); firstNameField.setEditable(false);
         middleNameField = new JTextField(); middleNameField.setEditable(false);
         lastNameField = new JTextField(); lastNameField.setEditable(false);
@@ -40,7 +41,7 @@ public class SingleViewTemp extends Standard{
         kraPinField = new JTextField(); kraPinField.setEditable(false);
         departmentDivisionField = new JTextField(); departmentDivisionField.setEditable(false);
 
-        centrePanel.add(new JLabel("Employee ID:")); centrePanel.add(empIDField);
+        centrePanel.add(new JLabel("Employee ID:")); centrePanel.add(tempIDField);
         centrePanel.add(new JLabel("First Name:")); centrePanel.add(firstNameField);
         centrePanel.add(new JLabel("Middle Name:")); centrePanel.add(middleNameField);
         centrePanel.add(new JLabel("Last Name:")); centrePanel.add(lastNameField);
@@ -63,6 +64,7 @@ public class SingleViewTemp extends Standard{
 
         navPanel.add(btnSearch);
         navPanel.add(btnEnableEdit);
+        navPanel.add(btnSave);
         navPanel.add(btnNew);
         navPanel.add(btnBack);
         navPanel.add(btnDelete);
@@ -88,7 +90,7 @@ public class SingleViewTemp extends Standard{
             } else if (e.getSource() == btnDelete) {
                 try (Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
                      PreparedStatement pstmt = conn.prepareStatement("DELETE FROM Temporary WHERE EmployeeID=?")) {
-                    pstmt.setInt(1, Integer.parseInt(empIDField.getText()));
+                    pstmt.setInt(1, Integer.parseInt(tempIDField.getText()));
                     int rowsDeleted = pstmt.executeUpdate();
                     if (rowsDeleted > 0) {
                         JOptionPane.showMessageDialog(null, "Record deleted successfully.");
@@ -116,7 +118,7 @@ public class SingleViewTemp extends Standard{
                     pstmt.setString(9, kraPinField.getText());
                     pstmt.setInt(10, Integer.parseInt(departmentDivisionField.getText()));
                     pstmt.setString(11, disabilitiesCombo.getSelectedItem().toString());
-                    pstmt.setInt(12, Integer.parseInt(empIDField.getText()));
+                    pstmt.setInt(12, Integer.parseInt(tempIDField.getText()));
 
                     int rowsUpdated = pstmt.executeUpdate();
                     if (rowsUpdated > 0) {
@@ -134,7 +136,7 @@ public class SingleViewTemp extends Standard{
     }
 
     private void editEnabled(){
-        empIDField.setEditable(false);
+        tempIDField.setEditable(false);
         firstNameField.setEditable(true);
         middleNameField.setEditable(true);
         lastNameField.setEditable(true);
@@ -154,7 +156,7 @@ public class SingleViewTemp extends Standard{
                 Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
                 Statement stmt = conn.createStatement();
         ) {
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Temporary WHERE TempID = '" + empIDField.getText()+"';");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Temporary WHERE TempID = '" + tempIDField.getText());
             if (rs.next()) {
                 firstNameField.setText(rs.getString("FirstName"));
                 middleNameField.setText(rs.getString("MiddleName"));
@@ -175,7 +177,7 @@ public class SingleViewTemp extends Standard{
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Failed to load employee data", "Database Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Temp Staff"+tempIDField.getText()+" does not exist.", "Database Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

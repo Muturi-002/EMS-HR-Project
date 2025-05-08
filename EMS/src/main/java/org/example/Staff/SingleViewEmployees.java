@@ -10,8 +10,9 @@ import java.sql.*;
 public class SingleViewEmployees extends Standard {
     String databaseUser = LoadEnv.getDatabaseUser();
     String databasePassword = LoadEnv.getDatabasePassword();
+    String url = LoadEnv.getURL();
+    String tnsAdmin = "/home/muturiiii/Desktop/Y3S2 Project/EMS-HR-Project/EMS/src/main/java/org/example/Wallet_EMS2";
     String databaseName = LoadEnv.getDatabaseName();
-    String url= LoadEnv.getURL();
 
     JPanel centrePanel = new JPanel();
     JPanel navPanel = getNavPanel();
@@ -21,6 +22,7 @@ public class SingleViewEmployees extends Standard {
     private JLabel lblEmpID,lblFirstName, lblMiddleName, lblLastName, lblNationalId, lblEmail,lblAddress, lblKraPin, lblDepartmentDivision, lblYearOfBirth, lblDisabilities, lblStatus;
     private JTextField empIDField,firstNameField, middleNameField, lastNameField, nationalIdField, emailField,addressField, kraPinField, departmentDivisionField, yearOfBirthField;
     SingleViewEmployees(){
+        System.setProperty("oracle.net.tns_admin", tnsAdmin);
         setTitle("View Each Employee Record");
         setLayout(new BorderLayout(20,20));
         centrePanel.setLayout(new GridLayout(12, 2, 10, 10));
@@ -114,7 +116,7 @@ public class SingleViewEmployees extends Standard {
             }else if (e.getSource()==btnSave){
                 //Saving changes
                 try (Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
-                     PreparedStatement pstmt = conn.prepareStatement("UPDATE " + databaseName + ".Employees SET FirstName=?, MiddleName=?, LastName=?, YearOfBirth=?, NationalIDNo=?, EmailAddress=?, PhysicalAddress=?, KRAPIN=?, DepartmentDivision=?, Disabilities=?, Status=? WHERE EmployeeID=?"))
+                     PreparedStatement pstmt = conn.prepareStatement("UPDATE Employees SET FirstName=?, MiddleName=?, LastName=?, YearOfBirth=?, NationalIDNo=?, EmailAddress=?, PhysicalAddress=?, KRAPIN=?, DepartmentDivision=?, Disabilities=?, Status=? WHERE EmployeeID=?"))
                 {
                     pstmt.setString(1, firstNameField.getText());
                     pstmt.setString(2, middleNameField.getText());
@@ -160,12 +162,12 @@ public class SingleViewEmployees extends Standard {
     }
 
     private void getRecords() {
+        String id=empIDField.getText();
         try (
                 Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
                 Statement stmt = conn.createStatement();
         ) {
-            String id=empIDField.getText();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Employees WHERE EmployeeID = '" + id+"';");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Employees WHERE EmployeeID = '" + id);
             if (rs.next()) {
                 firstNameField.setText(rs.getString("FirstName"));
                 middleNameField.setText(rs.getString("MiddleName"));
@@ -185,7 +187,7 @@ public class SingleViewEmployees extends Standard {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Failed to load employee data", "Database Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Employee "+id+" does not exist.", "Database Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

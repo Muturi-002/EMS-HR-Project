@@ -9,26 +9,28 @@ import java.awt.event.ActionListener;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Locale;
 
-public class EmployeeEntry extends Standard{
+public class EmployeeEntry extends Standard {
 
-    private JLabel lblFirstName, lblMiddleName, lblLastName, lblNationalId, lblEmail,lblAddress, lblKraPin, lblDepartmentDivision, lblYearOfBirth, lblDisabilities, lblStatus;
-    private JTextField firstNameField, middleNameField, lastNameField, nationalIdField, emailField,addressField, kraPinField, departmentDivisionField, yearOfBirthField;
+    private JLabel lblFirstName, lblMiddleName, lblLastName, lblNationalId, lblEmail, lblAddress, lblKraPin, lblDepartmentDivision, lblYearOfBirth, lblDisabilities, lblStatus;
+    private JTextField firstNameField, middleNameField, lastNameField, nationalIdField, emailField, addressField, kraPinField, departmentDivisionField, yearOfBirthField;
     private JComboBox<String> disabilitiesCombo, statusCombo;
     private JButton btnSave, btnClear,btnExit;
     //Date formatter
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     //Database connection
-    static Connection conn ;
-    Statement stmt;
+    static Connection conn;
     String databaseUser = LoadEnv.getDatabaseUser();
     String databasePassword = LoadEnv.getDatabasePassword();
-    String databaseName = LoadEnv.getDatabaseName();
-    String url= LoadEnv.getURL();
+    String url = LoadEnv.getURL();
+    String tnsAdmin = "/home/muturiiii/Desktop/Y3S2 Project/EMS-HR-Project/EMS/src/main/java/org/example/Wallet_EMS2";
 
     public EmployeeEntry() {
         setTitle("Add a New/Existing Employee");
 
+        System.setProperty("oracle.net.tns_admin", tnsAdmin);
         JPanel panel = new JPanel();
         JPanel navPanel = getNavPanel();
         panel.setLayout(new GridLayout(11, 2, 10, 10));
@@ -43,9 +45,9 @@ public class EmployeeEntry extends Standard{
         lblKraPin = new JLabel("KRA PIN:");
         lblDepartmentDivision = new JLabel("Department-Division:");
         lblDisabilities = new JLabel("Disabilities (if any):");
-        lblStatus= new JLabel("Employment Status");
+        lblStatus = new JLabel("Employment Status");
 
-        firstNameField= new JTextField();
+        firstNameField = new JTextField();
         lastNameField = new JTextField();
         middleNameField = new JTextField();
         yearOfBirthField = new JTextField();
@@ -54,7 +56,7 @@ public class EmployeeEntry extends Standard{
         addressField = new JTextField();
         kraPinField = new JTextField();
         departmentDivisionField = new JTextField();
-        String[] disab = {"Yes", "No"};
+        String[] disab = {"YES", "NO"}; // Consistent with database.sql
         disabilitiesCombo = new JComboBox<>(disab);
         String[] status = {"Active", "Inactive"};
         statusCombo = new JComboBox<>(status);
@@ -80,9 +82,9 @@ public class EmployeeEntry extends Standard{
         navPanel.add(btnExit);
 
         // Add panel to the frame
-        add(getUpperPanel(),BorderLayout.NORTH);
+        add(getUpperPanel(), BorderLayout.NORTH);
         add(panel, BorderLayout.CENTER);
-        add(navPanel,BorderLayout.SOUTH);
+        add(navPanel, BorderLayout.SOUTH);
 
         // Add action listener for the Save button
         btnSave.addActionListener(new ActionListener() {
@@ -105,6 +107,15 @@ public class EmployeeEntry extends Standard{
                 dispose();
             }
         });
+
+        // Add key listener to yearOfBirthField to force uppercase and specific format
+        yearOfBirthField.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyReleased(java.awt.event.KeyEvent e) {
+                String text = yearOfBirthField.getText().toUpperCase();
+                yearOfBirthField.setText(text);
+            }
+        });
     }
 
     private void saveEmployee() {
@@ -112,7 +123,7 @@ public class EmployeeEntry extends Standard{
         String mName = middleNameField.getText().toUpperCase();
         String lName = lastNameField.getText().toUpperCase();
         String yearBirth = yearOfBirthField.getText();
-        String formattedDate = LocalDate.parse(yearBirth, formatter).toString();
+        LocalDate formattedDate = LocalDate.parse(yearBirth, formatter);
         String nationalId = nationalIdField.getText();
         String emailAddress = emailField.getText().toLowerCase();
         String address = addressField.getText().toUpperCase();
@@ -121,33 +132,32 @@ public class EmployeeEntry extends Standard{
         String disabilities = (String) disabilitiesCombo.getSelectedItem();
         String status = (String) statusCombo.getSelectedItem();
 
-
         if (fName.isEmpty() || mName.isEmpty() || lName.isEmpty() || yearBirth.isEmpty() || nationalId.isEmpty() || address.isEmpty() || kraPin.isEmpty() || departmentDivision.isEmpty() || disabilities.isEmpty() || emailAddress.isEmpty() || status.isEmpty()) {
             JOptionPane.showMessageDialog(null, "All fields must be filled!", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             // Saving info to the database
-            try {
-                conn = DriverManager.getConnection(url, databaseUser, databasePassword);
-                String sql = "INSERT INTO Employees (FirstName, MiddleName, LastName, YearOfBirth, NationalIDNo, EmailAddress, PhysicalAddress, KRAPIN, DepartmentDivision, Disabilities, Status) " +
-                        "VALUES (?,?,?,?,?,?,?,?,?,?,?);";
-                PreparedStatement pstmt = conn.prepareStatement(sql);
-                pstmt.setString(1, fName);
-                pstmt.setString(2, mName);
-                pstmt.setString(3, lName);
-                pstmt.setString(4, formattedDate);
-                pstmt.setString(5, nationalId);
-                pstmt.setString(6, emailAddress);
-                pstmt.setString(7, address);
-                pstmt.setString(8, kraPin);
-                pstmt.setString(9, departmentDivision);
-                pstmt.setString(10, disabilities);
-                pstmt.setString(11, status);
+            try (Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
+                 PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Employees (FirstName, MiddleName, LastName, YearOfBirth, NationalIDNo, EmailAddress, PhysicalAddress, Disabilities, KRAPIN, DepartmentDivision, Status) " +
+                         "VALUES (?,?,?,?,?,?,?,?,?,?,?)")) {
+
+                            pstmt.setString(1, fName);
+                            pstmt.setString(2, mName);
+                            pstmt.setString(3, lName);
+                            pstmt.setObject(4, formattedDate); // Send in YYYY-MM-DD format
+                            pstmt.setString(5, nationalId);
+                            pstmt.setString(6, emailAddress);
+                            pstmt.setString(7, address);
+                            pstmt.setString(8, disabilities);
+                            pstmt.setString(9, kraPin);
+                            pstmt.setString(10, departmentDivision);
+                            pstmt.setString(11, status);
 
                 pstmt.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Employee record saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 clearFields();
-            } catch (Exception ex) {
+            } catch (SQLException ex) {
                 ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Database error: " + ex.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
             }
 
         }
@@ -162,7 +172,8 @@ public class EmployeeEntry extends Standard{
         addressField.setText("");
         kraPinField.setText("");
         departmentDivisionField.setText("");
-        disabilitiesCombo.setSelectedIndex(0); // Reset to "No"
+        disabilitiesCombo.setSelectedIndex(0);
+        statusCombo.setSelectedIndex(0);
     }
 
     public static void main(String[] args) {
