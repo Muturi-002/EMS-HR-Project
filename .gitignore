@@ -19,3 +19,5 @@
 ##Ensure app.properties file is no longer pushed
 *app.properties
 
+#Localize access to ATP database EMS2
+*Wallet_*
