@@ -156,7 +156,7 @@ public class SingleViewTemp extends Standard{
                 Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
                 Statement stmt = conn.createStatement();
         ) {
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Temporary WHERE TempID = '" + tempIDField.getText());
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Temporary WHERE TempID = " + tempIDField.getText());
             if (rs.next()) {
                 firstNameField.setText(rs.getString("FirstName"));
                 middleNameField.setText(rs.getString("MiddleName"));

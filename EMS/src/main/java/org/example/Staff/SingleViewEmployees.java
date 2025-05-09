@@ -167,7 +167,7 @@ public class SingleViewEmployees extends Standard {
                 Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
                 Statement stmt = conn.createStatement();
         ) {
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Employees WHERE EmployeeID = '" + id);
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Employees WHERE EmployeeID = " + id);
             if (rs.next()) {
                 firstNameField.setText(rs.getString("FirstName"));
                 middleNameField.setText(rs.getString("MiddleName"));

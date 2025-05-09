@@ -84,6 +84,7 @@ public class ViewTempStaff extends Standard {
                         rs.getString("WorkLevel"),
                         rs.getDate("YearOfBirth"),
                         rs.getString("NationalIDNo"),
+                        rs.getString("EmailAddress"),
                         rs.getString("PhysicalAddress"),
                         rs.getString("Disabilities"),
                         rs.getString("KRAPIN"),

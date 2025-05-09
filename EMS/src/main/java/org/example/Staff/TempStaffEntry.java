@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.*;
@@ -35,13 +37,49 @@ public class TempStaffEntry extends Standard implements ActionListener {
         panel.setLayout(new GridLayout(12, 2, 10, 10)); // Increased rows for disabilities
 
         firstNameField = new JTextField();
+        firstNameField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isLetter(c) && c != ' ') { // Allow only letters and spaces
+                    e.consume(); // Ignore this character
+                }
+            }
+        });
         middleNameField = new JTextField();
+        middleNameField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isLetter(c) && c != ' ') { // Allow only letters and spaces
+                    e.consume(); // Ignore this character
+                }
+            }
+        });
         lastNameField = new JTextField();
+        lastNameField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isLetter(c) && c != ' ') { // Allow only letters and spaces
+                    e.consume(); // Ignore this character
+                }
+            }
+        });
         String[] workLevels = {"Intern", "Attache"};
         workLevelCombo = new JComboBox<>(workLevels);
         yearOfBirthField = new JTextField();
         nationalIdField = new JTextField();
         emailField=new JTextField();
+        emailField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isLetterOrDigit(c) && c != '@' && c != '.') {
+                    e.consume(); // Ignore this character
+                }
+            }
+        });
         String[] disabilitiesOptions = {"NO", "YES"};
         disabilitiesCombo = new JComboBox<>(disabilitiesOptions);
         kraPinField = new JTextField();
