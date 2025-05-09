@@ -5,9 +5,9 @@ import org.example.DB.Database;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalTime; //  Required for LocalTime
 
-public class Attendance extends Standard{
-    public Attendance(){
+public class Attendance extends Standard {
     private String employeeId;
     private boolean isPresent;
     private LocalTime checkInTime;
@@ -40,7 +40,6 @@ public class Attendance extends Standard{
 
     public LocalTime getCheckOutTime() {
         return checkOutTime;
-    }
     }
 }
 
