@@ -45,18 +45,24 @@ public class ViewEmployees extends Standard {
                 JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         tempStaffButton = new JButton("Check Temporary Staff");
-        tempStaffButton.addActionListener(e -> new ViewTempStaff());
+        tempStaffButton.addActionListener(e -> {
+                dispose();
+                new ViewTempStaff();
+        });
         btnSingleRecord= new JButton("View Each Record");
-        btnSingleRecord.addActionListener(e -> new SingleViewEmployees());
+        btnSingleRecord.addActionListener(e -> {
+            dispose();
+            new SingleViewEmployees();
+        });
         btnExit= new JButton("Back to Homepage");
         btnExit.addActionListener(e -> {
             dispose();
-            new Home();
         });
         btnNew= new JButton("Add New Record");navPanel.add(btnNew);
         btnNew.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                dispose();
                 new EmployeeEntry();
             }
         });
@@ -82,26 +88,24 @@ public class ViewEmployees extends Standard {
         try (
                 Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * FROM Employees")) { // Assuming table name is "Employees"
-
-            while (rs.next()) {
-                Object[] row = {
-                        rs.getInt("EmployeeID"),
-                        rs.getString("FirstName"),
-                        rs.getString("MiddleName"),
-                        rs.getString("LastName"),
-                        rs.getDate("YearOfBirth"),
-                        rs.getString("NationalIDNo"),
-                        rs.getString("EmailAddress"),
-                        rs.getString("PhysicalAddress"),
-                        rs.getBoolean("Disabilities"),
-                        rs.getString("KRAPIN"),
-                        rs.getInt("DepartmentDivision"),
-                        rs.getString("Status")
-                };
-                model.addRow(row);
-            }
-
+                ResultSet rs = stmt.executeQuery("SELECT * FROM Employees ORDER BY EmployeeID")) {
+                while (rs.next()) {
+                    Object[] row = {
+                            rs.getInt("EmployeeID"),
+                            rs.getString("FirstName"),
+                            rs.getString("MiddleName"),
+                            rs.getString("LastName"),
+                            rs.getDate("YearOfBirth"),
+                            rs.getString("NationalIDNo"),
+                            rs.getString("EmailAddress"),
+                            rs.getString("PhysicalAddress"),
+                            rs.getBoolean("Disabilities"),
+                            rs.getString("KRAPIN"),
+                            rs.getInt("DepartmentDivision"),
+                            rs.getString("Status")
+                    };
+                    model.addRow(row);
+                }
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error loading data from database.", "Database Error", JOptionPane.ERROR_MESSAGE);

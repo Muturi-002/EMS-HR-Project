@@ -48,12 +48,12 @@ public class ViewTempStaff extends Standard {
         getContentPane().add(scrollPane, BorderLayout.CENTER);
         btnExit.addActionListener(e -> {
             dispose();
-            new Home();
         });
         btnNew= new JButton("Add new Intern/Attache");navPanel.add(btnNew);
         btnNew.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                dispose();
                 new TempStaffEntry();
             }
         });
@@ -73,7 +73,7 @@ public class ViewTempStaff extends Standard {
         try (
                 Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * FROM Temporary")) {
+                ResultSet rs = stmt.executeQuery("SELECT * FROM Temporary ORDER BY TempID")) {
 
             while (rs.next()) {
                 Object[] row = {

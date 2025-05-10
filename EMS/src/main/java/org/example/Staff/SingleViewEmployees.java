@@ -90,7 +90,6 @@ public class SingleViewEmployees extends Standard {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == btnBack) {
                 dispose();
-                new ViewEmployees();
             } else if (e.getSource()==btnSearch){
                 getRecords();
             }else if (e.getSource() == btnEnableEdit) {

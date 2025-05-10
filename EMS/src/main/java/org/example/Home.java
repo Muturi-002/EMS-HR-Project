@@ -3,6 +3,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import org.example.Staff.*;
+import org.example.HR.*;
 
 public class Home extends JFrame{
     JButton btnview, btnLeaves, btnexit,btnemployee,btntemp,btntempstaff,btnAttendance;
@@ -28,7 +29,7 @@ public class Home extends JFrame{
        btnemployee = new JButton("Add Employee");
        btntemp= new JButton("Add Temporary stuff");
        btntempstaff= new JButton("View Temporary Staff Details");
-       btnAttendance= new JButton("Attendance");
+       btnAttendance= new JButton("Record Attendance");
 
        //nav.setLayout(new GridLayout(2,2,20,50));
        nav.setLayout(new FlowLayout());
@@ -69,7 +70,11 @@ public class Home extends JFrame{
 
         }
        });
-       
+       btnAttendance.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e){
+            new Attendance();
+        }
+    });
        btnexit.addActionListener(new ActionListener(){
         public void actionPerformed(ActionEvent e){
             System.exit(0);
@@ -77,6 +82,6 @@ public class Home extends JFrame{
        });
     }
     public static void main (String []args){
-        new Home();
+        SwingUtilities.invokeLater( ()-> new Home());
     }
 }
