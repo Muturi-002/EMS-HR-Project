@@ -23,7 +23,6 @@ public class EmployeeEntry extends Standard {
     //Date formatter
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     //Database connection
-    static Connection conn;
     String databaseUser = LoadEnv.getDatabaseUser();
     String databasePassword = LoadEnv.getDatabasePassword();
     String url = LoadEnv.getURL();
@@ -207,6 +206,7 @@ public class EmployeeEntry extends Standard {
         lastNameField.setText("");
         yearOfBirthField.setText("");
         nationalIdField.setText("");
+        emailField.setText("");
         addressField.setText("");
         kraPinField.setText("");
         departmentDivisionField.setText("");

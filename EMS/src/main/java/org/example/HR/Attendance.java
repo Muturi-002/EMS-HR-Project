@@ -2,7 +2,6 @@ package org.example.HR;
 
 import org.example.LoadEnv;
 import org.example.Standard;
-import org.example.DB.Database;
 
 import javax.swing.*;
 import java.awt.*;
@@ -66,9 +65,9 @@ public class Attendance extends Standard implements ActionListener{
 
     // Methods to mark check-in and check-out
     public void markAttendance(LocalTime checkIn) {
-        if (checkIn.isAfter(LocalTime.of(8, 0))) {
+        /*if (checkIn.isAfter(LocalTime.of(8, 0))) {
             System.out.println("Warning: Outside standard time range (8 AM - 5 PM)");
-        }else {
+        }else {*/
             isPresent = true;
             employeeId = Integer.parseInt(txtEmployeeId.getText());
             Connection conn;
@@ -98,7 +97,7 @@ public class Attendance extends Standard implements ActionListener{
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        //}
     }
 
     // Getters

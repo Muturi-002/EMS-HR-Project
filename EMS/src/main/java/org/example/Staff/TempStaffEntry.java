@@ -21,8 +21,6 @@ public class TempStaffEntry extends Standard implements ActionListener {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     // Database credentials (replace with your actual credentials)
-    static Connection conn ;
-    Statement stmt;
     String databaseUser = LoadEnv.getDatabaseUser();
     String databasePassword = LoadEnv.getDatabasePassword();
     String url = LoadEnv.getURL();
@@ -198,6 +196,7 @@ public class TempStaffEntry extends Standard implements ActionListener {
         lastNameField.setText("");
         yearOfBirthField.setText("");
         nationalIdField.setText("");
+        emailField.setText("");
         addressField.setText("");
         disabilitiesCombo.setSelectedIndex(0);
         kraPinField.setText("");

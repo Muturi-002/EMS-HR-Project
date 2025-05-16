@@ -123,7 +123,6 @@ public class SingleViewTemp extends Standard{
                     if (rowsUpdated > 0) {
                         JOptionPane.showMessageDialog(null, "Record updated successfully.");
                         dispose();
-                        new ViewEmployees();
                     } else {
                         JOptionPane.showMessageDialog(null, "Failed to update record.");
                     }

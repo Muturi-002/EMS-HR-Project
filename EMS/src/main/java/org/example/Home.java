@@ -74,12 +74,17 @@ public class Home extends JFrame{
         public void actionPerformed(ActionEvent e){
             new Attendance();
         }
-    });
+        });
        btnexit.addActionListener(new ActionListener(){
         public void actionPerformed(ActionEvent e){
             System.exit(0);
         }
        });
+        btnLeaves.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                new ViewLeaves();
+            }
+        });
     }
     public static void main (String []args){
         SwingUtilities.invokeLater( ()-> new Home());

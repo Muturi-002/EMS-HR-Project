@@ -134,7 +134,6 @@ public class SingleViewEmployees extends Standard {
                     if (rowsUpdated > 0) {
                         JOptionPane.showMessageDialog(SingleViewEmployees.this, "Record updated successfully.");
                         dispose();
-                        new ViewEmployees();
                     } else {
                         JOptionPane.showMessageDialog(SingleViewEmployees.this, "Failed to update record.");
                     }
