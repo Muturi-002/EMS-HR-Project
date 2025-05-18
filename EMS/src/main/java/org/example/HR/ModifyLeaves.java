@@ -19,7 +19,7 @@ public class ModifyLeaves extends Standard implements ActionListener{
     String url = LoadEnv.getURL();
     String tnsAdmin = "/home/muturiiii/Desktop/Y3S2 Project/EMS-HR-Project/EMS/src/main/java/org/example/Wallet_EMS2";
 
-    JTextField txtDuration,txtEmployeeId,txtStartDate,txtEndDate;
+    JTextField txtDuration,txtEmployeeId,txtStartDate,txtEndDate,txtLeaveId;
     JTextArea txtReason;
     JComboBox <String> chkStatus;
     JButton btnBack,btnEnableEdit,btnDelete,btnNew,btnSave,btnSearch;
@@ -37,6 +37,8 @@ public class ModifyLeaves extends Standard implements ActionListener{
         JLabel lblEndDate= new JLabel("End Date (YYYY-MM-DD format)");
         JLabel lblReason= new JLabel("Reason");
         JLabel lblStatus= new JLabel("Request Status");
+        JLabel lblLeaveId= new JLabel("Leave ID");
+        txtLeaveId= new JTextField(20);
         txtEmployeeId= new JTextField(20);
         txtDuration= new JTextField(2);
         txtDuration.addKeyListener(new KeyAdapter() {
@@ -59,10 +61,11 @@ public class ModifyLeaves extends Standard implements ActionListener{
         txtEndDate= new JTextField(20);
         txtReason= new JTextArea(5, 30);
 
-        leavePanel.setLayout(new GridLayout(4,1,20,10));
+        leavePanel.setLayout(new GridLayout(5,1,20,10));
         timePanel.setLayout(new GridLayout(3,2,20,10));
         reasonPanel.setLayout(new GridLayout(1,2,10,10));
         statusPanel.setLayout(new GridLayout(1,2,10,10));
+        empPanel.add(lblLeaveId); empPanel.add(txtLeaveId);
         empPanel.add(lblEmployee); empPanel.add(txtEmployeeId);
         timePanel.add(lblStartDate); timePanel.add(txtStartDate);
         timePanel.add(lblDuration); timePanel.add(txtDuration);
@@ -78,8 +81,10 @@ public class ModifyLeaves extends Standard implements ActionListener{
         getNavPanel().add(btnEnableEdit=new JButton("Enable Edit"));
         getNavPanel().add(btnNew=new JButton("Add New Leave Request"));
         getNavPanel().add(btnDelete= new JButton("Delete Leave Request"));
+        getNavPanel().add(btnSave= new JButton("Save changes"));
         add(leavePanel, BorderLayout.CENTER);
 
+        txtEmployeeId.setEditable(false);
         txtReason.setEditable(false);
         txtDuration.setEditable(false);
         txtStartDate.setEditable(false);
@@ -91,6 +96,7 @@ public class ModifyLeaves extends Standard implements ActionListener{
         btnEnableEdit.addActionListener(this);
         btnDelete.addActionListener(this);
         btnNew.addActionListener(this);
+        btnSave.addActionListener(this);
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -105,8 +111,8 @@ public class ModifyLeaves extends Standard implements ActionListener{
             new Leaves();
         } else if (e.getSource() == btnDelete) {
             try (Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
-                 PreparedStatement pstmt = conn.prepareStatement("DELETE FROM LeaveRequests WHERE EmployeeID=?")) {
-                pstmt.setInt(1, Integer.parseInt(txtEmployeeId.getText()));
+                 PreparedStatement pstmt = conn.prepareStatement("DELETE FROM LeaveRequests WHERE LeaveID=?")) {
+                pstmt.setInt(1, Integer.parseInt(txtLeaveId.getText()));
                 int rowsDeleted = pstmt.executeUpdate();
                 if (rowsDeleted > 0) {
                     JOptionPane.showMessageDialog(null, "Record deleted successfully.");
@@ -120,7 +126,7 @@ public class ModifyLeaves extends Standard implements ActionListener{
             }
         }else if (e.getSource()==btnSave) {
             try (Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
-                 PreparedStatement pstmt = conn.prepareStatement("UPDATE LeaveRequests SET EmployeeID=?, StartDate=?, EndDate=?, Reason=?, Status=? WHERE EmployeeID=?")) {
+                 PreparedStatement pstmt = conn.prepareStatement("UPDATE LeaveRequests SET EmployeeID=?, StartDate=?, EndDate=?, Reason=?, Status=? WHERE LeaveID=?")) {
                 pstmt.setString(1, txtEmployeeId.getText());
                 pstmt.setDate(2, Date.valueOf(txtStartDate.getText()));
                 pstmt.setDate(3, Date.valueOf(txtEndDate.getText()));
@@ -145,8 +151,9 @@ public class ModifyLeaves extends Standard implements ActionListener{
                 Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
                 Statement stmt = conn.createStatement();
         ) {
-            ResultSet rs = stmt.executeQuery("SELECT * FROM LeaveRequests WHERE EmployeeID = " + txtEmployeeId.getText());
+            ResultSet rs = stmt.executeQuery("SELECT * FROM LeaveRequests WHERE LeaveID = " + txtLeaveId.getText());
             if (rs.next()) {
+                txtEmployeeId.setText((String.valueOf(rs.getInt("EmployeeID"))));
                 txtStartDate.setText(String.valueOf(rs.getDate("StartDate")));
                 txtEndDate.setText(String.valueOf(rs.getDate("EndDate")));
                 txtReason.setText(rs.getString("Reason"));
@@ -156,11 +163,11 @@ public class ModifyLeaves extends Standard implements ActionListener{
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Leave Request record of Employee-ID "+txtEmployeeId.getText()+" does not exist.", "Database Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Leave Request record of Leave-ID "+txtLeaveId.getText()+" does not exist.", "Database Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     private void editEnabled(){
-        txtEmployeeId.setEditable(false);
+        txtLeaveId.setEditable(false);
         txtStartDate.setEditable(true);
         txtDuration.setEditable(true);
         txtReason.setEditable(true);

@@ -23,7 +23,7 @@ public class ViewTempStaff extends Standard {
         System.setProperty("oracle.net.tns_admin", tnsAdmin);
         setTitle("View Temporary Staff's Records");
 
-        String[] columnNames = {"ID", "First Name", "Middle Name", "Last Name", "Work Level", "Year of Birth", "National ID", "Address", "Disabilities", "KRA PIN", "Department Division"};
+        String[] columnNames = {"ID", "First Name", "Middle Name", "Last Name", "Work Level", "Year of Birth", "National ID", "Email Address","Physical Address","Disabilities", "KRA PIN", "Department Division"};
 
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         tempTable = new JTable(model);

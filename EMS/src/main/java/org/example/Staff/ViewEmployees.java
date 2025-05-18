@@ -99,7 +99,7 @@ public class ViewEmployees extends Standard {
                             rs.getString("NationalIDNo"),
                             rs.getString("EmailAddress"),
                             rs.getString("PhysicalAddress"),
-                            rs.getBoolean("Disabilities"),
+                            rs.getString("Disabilities"),
                             rs.getString("KRAPIN"),
                             rs.getInt("DepartmentDivision"),
                             rs.getString("Status")

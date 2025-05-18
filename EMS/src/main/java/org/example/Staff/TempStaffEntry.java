@@ -117,7 +117,7 @@ public class TempStaffEntry extends Standard implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == workLevelCombo) {
-            if (workLevelCombo.getSelectedItem().equals("INTERN")) {
+            if (workLevelCombo.getSelectedItem().equals("Intern")) {
                 kraPinField.setEditable(true);
             }else{
                 kraPinField.setEditable(false);
@@ -133,7 +133,7 @@ public class TempStaffEntry extends Standard implements ActionListener {
             String emailAddress= emailField.getText().trim().toLowerCase();
             String address = addressField.getText().trim().toUpperCase();
             String disabilities = (String) disabilitiesCombo.getSelectedItem(); // Get from combo box
-            String kraPin = kraPinField.getText().trim().toLowerCase();
+            String kraPin = kraPinField.getText().trim().toUpperCase();
             String departmentDivisionText = departmentDivisionField.getText().trim();
 
             // Basic Validation

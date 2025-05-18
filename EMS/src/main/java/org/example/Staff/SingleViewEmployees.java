@@ -50,7 +50,7 @@ public class SingleViewEmployees extends Standard {
         addressField = new JTextField(); addressField.setEditable(false);
         kraPinField = new JTextField(); kraPinField.setEditable(false);
         departmentDivisionField = new JTextField(); departmentDivisionField.setEditable(false);
-        String[] disab = {"Yes", "No"};
+        String[] disab = {"YES", "NO"};
         disabilitiesCombo = new JComboBox<>(disab); disabilitiesCombo.setEnabled(false);
         String[] status = {"Active", "Inactive"};
         statusCombo = new JComboBox<>(status); statusCombo.setEnabled(false);
@@ -80,6 +80,7 @@ public class SingleViewEmployees extends Standard {
         navPanel.add(btnBack);
         navPanel.add(btnDelete);
         navPanel.add(btnSearch);
+        navPanel.add(btnSave);
         add(getUpperPanel(),BorderLayout.NORTH);
         add(centrePanel, BorderLayout.CENTER);
         add(navPanel,BorderLayout.SOUTH);
@@ -117,14 +118,14 @@ public class SingleViewEmployees extends Standard {
                 try (Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
                      PreparedStatement pstmt = conn.prepareStatement("UPDATE Employees SET FirstName=?, MiddleName=?, LastName=?, YearOfBirth=?, NationalIDNo=?, EmailAddress=?, PhysicalAddress=?, KRAPIN=?, DepartmentDivision=?, Disabilities=?, Status=? WHERE EmployeeID=?"))
                 {
-                    pstmt.setString(1, firstNameField.getText());
-                    pstmt.setString(2, middleNameField.getText());
-                    pstmt.setString(3, lastNameField.getText());
+                    pstmt.setString(1, firstNameField.getText().toUpperCase());
+                    pstmt.setString(2, middleNameField.getText().toUpperCase());
+                    pstmt.setString(3, lastNameField.getText().toUpperCase());
                     pstmt.setDate(4, Date.valueOf(yearOfBirthField.getText()));
                     pstmt.setString(5, nationalIdField.getText());
                     pstmt.setString(6, emailField.getText());
-                    pstmt.setString(7, addressField.getText());
-                    pstmt.setString(8, kraPinField.getText());
+                    pstmt.setString(7, addressField.getText().toUpperCase());
+                    pstmt.setString(8, kraPinField.getText().toUpperCase());
                     pstmt.setInt(9, Integer.parseInt(departmentDivisionField.getText()));
                     pstmt.setString(10, disabilitiesCombo.getSelectedItem().toString());
                     pstmt.setString(11, statusCombo.getSelectedItem().toString());

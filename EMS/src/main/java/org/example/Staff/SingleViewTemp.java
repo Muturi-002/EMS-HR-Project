@@ -30,7 +30,7 @@ public class SingleViewTemp extends Standard{
         firstNameField = new JTextField(); firstNameField.setEditable(false);
         middleNameField = new JTextField(); middleNameField.setEditable(false);
         lastNameField = new JTextField(); lastNameField.setEditable(false);
-        String[] workLevels = {"INTERN", "ATTACHE"};
+        String[] workLevels = {"Intern", "Attache"};
         workLevelCombo = new JComboBox<>(workLevels); workLevelCombo.setEditable(false);
         yearOfBirthField = new JTextField(); yearOfBirthField.setEditable(false);
         nationalIdField = new JTextField(); nationalIdField.setEditable(false);
@@ -41,7 +41,7 @@ public class SingleViewTemp extends Standard{
         kraPinField = new JTextField(); kraPinField.setEditable(false);
         departmentDivisionField = new JTextField(); departmentDivisionField.setEditable(false);
 
-        centrePanel.add(new JLabel("Employee ID:")); centrePanel.add(tempIDField);
+        centrePanel.add(new JLabel("Temporary ID:")); centrePanel.add(tempIDField);
         centrePanel.add(new JLabel("First Name:")); centrePanel.add(firstNameField);
         centrePanel.add(new JLabel("Middle Name:")); centrePanel.add(middleNameField);
         centrePanel.add(new JLabel("Last Name:")); centrePanel.add(lastNameField);
@@ -77,6 +77,13 @@ public class SingleViewTemp extends Standard{
     private class Nav implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == workLevelCombo) {
+                if (workLevelCombo.getSelectedItem().equals("Intern")) {
+                    kraPinField.setEditable(true);
+                }else{
+                    kraPinField.setEditable(false);
+                }
+            }
             if (e.getSource() == btnBack) {
                 dispose();
             } else if (e.getSource()==btnSearch){
@@ -88,7 +95,7 @@ public class SingleViewTemp extends Standard{
                 new TempStaffEntry();
             } else if (e.getSource() == btnDelete) {
                 try (Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
-                     PreparedStatement pstmt = conn.prepareStatement("DELETE FROM Temporary WHERE EmployeeID=?")) {
+                     PreparedStatement pstmt = conn.prepareStatement("DELETE FROM Temporary WHERE TempID=?")) {
                     pstmt.setInt(1, Integer.parseInt(tempIDField.getText()));
                     int rowsDeleted = pstmt.executeUpdate();
                     if (rowsDeleted > 0) {
@@ -104,17 +111,17 @@ public class SingleViewTemp extends Standard{
             }else if (e.getSource()==btnSave){
                 //Saving changes
                 try (Connection conn = DriverManager.getConnection(url, databaseUser, databasePassword);
-                     PreparedStatement pstmt = conn.prepareStatement("UPDATE Temporary SET FirstName=?, MiddleName=?, LastName=?, WorkLevel=?, YearOfBirth=?, NationalIDNo=?, EmailAddress=?, PhysicalAddress=?, KRAPIN=?, DepartmentDivision=?, Disabilities=? WHERE EmployeeID=?"))
+                     PreparedStatement pstmt = conn.prepareStatement("UPDATE Temporary SET FirstName=?, MiddleName=?, LastName=?, WorkLevel=?, YearOfBirth=?, NationalIDNo=?, EmailAddress=?, PhysicalAddress=?, KRAPIN=?, DepartmentDivision=?, Disabilities=? WHERE TempID=?"))
                 {
-                    pstmt.setString(1, firstNameField.getText());
-                    pstmt.setString(2, middleNameField.getText());
-                    pstmt.setString(3, lastNameField.getText());
+                    pstmt.setString(1, firstNameField.getText().toUpperCase());
+                    pstmt.setString(2, middleNameField.getText().toUpperCase());
+                    pstmt.setString(3, lastNameField.getText().toUpperCase());
                     pstmt.setString(4, workLevelCombo.getSelectedItem().toString());
                     pstmt.setDate(5, Date.valueOf(yearOfBirthField.getText()));
                     pstmt.setString(6, nationalIdField.getText());
                     pstmt.setString(7, emailField.getText());
-                    pstmt.setString(8, addressField.getText());
-                    pstmt.setString(9, kraPinField.getText());
+                    pstmt.setString(8, addressField.getText().toUpperCase());
+                    pstmt.setString(9, kraPinField.getText().toUpperCase());
                     pstmt.setInt(10, Integer.parseInt(departmentDivisionField.getText()));
                     pstmt.setString(11, disabilitiesCombo.getSelectedItem().toString());
                     pstmt.setInt(12, Integer.parseInt(tempIDField.getText()));
