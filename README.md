@@ -10,38 +10,39 @@ The system is a native Java GUI application, created using the swing package.
 4. An Oracle APEX account
 
 ## Project Structure
-``` tree
+```tree
 EMS/
 ├── src/
 │   ├── main/
 │   │   ├── java/
 │   │   │   └── org/
-│   │   │       └── example
-│   │   │           └── DB/
-│   │   │               └── Database.java # contains code for creating the database.
-│   │   │               └── database.sql # reference to the database created/
-│   │   │           └── HR/
-│   │   │               └── Attendance.java # records employee arrival time.
-│   │   │               └── Auth.java # login credentials to the application are entered.
-│   │   │               └── Leaves.java # recording leave requests.
-│   │   │               └── ModifyLeaves.java # editing leave requests as needed.
-│   │   │               └── ViewLeaves.java # tabular view of pending leave requests
-│   │   │           └── Staff/
-│   │   │               └── EmployeeEntry.java # entry of employees on contratc-basis.
-│   │   │               └── SingleViewEmployees.java # view each employee record and modify.
-│   │   │               └── SingleViewTemp.java # view each Temporary staff record and modify.
-│   │   │               └── TempStaffEntry.java # entry of interns and Attaches.
-│   │   │               └── ViewEmployees.java # tabular view of all employees.
-│   │   │               └── ViewTempStaff.java # tabular view of all interns and attaches.
-│   │   │           └── app.properties # environment variables
-│   │   │           └── Home.java # initial page after login
-│   │   │           └── LoadEnv.java # loading env. variables from app.properties
-│   │   │           └── Standard.java # setting unified display accross all pages.
-│   ├── test/java/
+│   │   │       └── example/
+│   │   │           ├── DB/
+│   │   │           │   ├── Database.java         # contains code for creating the database
+│   │   │           │   └── database.sql         # reference to the database created
+│   │   │           ├── HR/
+│   │   │           │   ├── Attendance.java       # records employee arrival time
+│   │   │           │   ├── Auth.java            # login credentials to the application are entered
+│   │   │           │   ├── Leaves.java          # recording leave requests
+│   │   │           │   ├── ModifyLeaves.java    # editing leave requests as needed
+│   │   │           │   └── ViewLeaves.java      # tabular view of pending leave requests
+│   │   │           ├── Staff/
+│   │   │           │   ├── EmployeeEntry.java       # entry of employees on contract-basis
+│   │   │           │   ├── SingleViewEmployees.java # view each employee record and modify
+│   │   │           │   ├── SingleViewTemp.java      # view each Temporary staff record and modify
+│   │   │           │   ├── TempStaffEntry.java      # entry of interns and attaches
+│   │   │           │   ├── ViewEmployees.java       # tabular view of all employees
+│   │   │           │   └── ViewTempStaff.java       # tabular view of all interns and attaches
+│   │   │           ├── app.properties           # environment variables
+│   │   │           ├── Home.java                # initial page after login
+│   │   │           ├── LoadEnv.java             # loading env. variables from app.properties
+│   │   │           └── Standard.java            # setting unified display across all pages
+│   ├── test/
+│   │   └── java/
 ├── target/
-│   ├── classes/
-└──  pom.xml/                         
-```
+│   └── classes/
+└── pom.xml
+```        
 
 ## Steps
 1. Clone this repository, under the 'Oracle-ATP' branch, which is the default branch.
