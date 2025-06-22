@@ -3,6 +3,9 @@ The intent of this project is to create a simple but efficient HR system designe
 
 The system is a native Java GUI application, created using the swing package.
 
+## System Design Architecture
+![System Architecture Diagram](<System Design Architecture.png>)
+
 ## Requirements
 1. Java JDK, version 20+
 2. An Oracle Cloud Infrastructure (OCI) account
